@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "kixdmwZ8w7w=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\LORENZODELIMAVOLACO\\Documents\\ProjetoMediasaver\\backend\\backend\\MediaSaver.Api\\MediaSaver.Api.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\LORENZODELIMAVOLACO\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.19\\microsoft.aspnetcore.openapi.9.0.19.nupkg.sha512",
+    "C:\\Users\\LORENZODELIMAVOLACO\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}

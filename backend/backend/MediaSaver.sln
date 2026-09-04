@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaSaver.Api", "MediaSaver.Api\MediaSaver.Api.csproj", "{9F47F47E-8097-4D36-962D-0321CB7B125C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaSaver.Domain", "MediaSaver.Domain\MediaSaver.Domain.csproj", "{62536E3E-3773-496F-9217-8EC23A847F71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaSaver.Application", "MediaSaver.Application\MediaSaver.Application.csproj", "{B22B71DB-23D8-4F32-BA15-25BE8AEE2875}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaSaver.Infrastructure", "MediaSaver.Infrastructure\MediaSaver.Infrastructure.csproj", "{711972D8-4B90-4E86-95C2-F9CEAA29D826}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F47F47E-8097-4D36-962D-0321CB7B125C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F47F47E-8097-4D36-962D-0321CB7B125C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F47F47E-8097-4D36-962D-0321CB7B125C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F47F47E-8097-4D36-962D-0321CB7B125C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62536E3E-3773-496F-9217-8EC23A847F71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62536E3E-3773-496F-9217-8EC23A847F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62536E3E-3773-496F-9217-8EC23A847F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62536E3E-3773-496F-9217-8EC23A847F71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B22B71DB-23D8-4F32-BA15-25BE8AEE2875}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B22B71DB-23D8-4F32-BA15-25BE8AEE2875}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B22B71DB-23D8-4F32-BA15-25BE8AEE2875}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B22B71DB-23D8-4F32-BA15-25BE8AEE2875}.Release|Any CPU.Build.0 = Release|Any CPU
+		{711972D8-4B90-4E86-95C2-F9CEAA29D826}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{711972D8-4B90-4E86-95C2-F9CEAA29D826}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{711972D8-4B90-4E86-95C2-F9CEAA29D826}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{711972D8-4B90-4E86-95C2-F9CEAA29D826}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

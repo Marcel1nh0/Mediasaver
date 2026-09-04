@@ -1,0 +1,6 @@
+@MediaSaver.Api_HostAddress = http://localhost:5095
+
+GET {{MediaSaver.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
