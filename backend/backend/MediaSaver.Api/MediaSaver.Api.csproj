@@ -4,6 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Permite guardar ClientId/ClientSecret com "dotnet user-secrets" -->
+    <UserSecretsId>mediasaver-api-7c1e2f4a-3b9d-4e8a-9f61-2d5c8b0a1e37</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

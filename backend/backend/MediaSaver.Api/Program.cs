@@ -1,41 +1,45 @@
+using MediaSaver.Api.Endpoints;
+using MediaSaver.Application.Comum;
+using MediaSaver.Infrastructure;
+using Microsoft.AspNetCore.Diagnostics;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddInfrastructure(builder.Configuration);
+
+// Libera o front-end para chamar a API. Em produção, troque AllowAnyOrigin
+// por WithOrigins("https://seu-site.com").
+builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
+    p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Tratamento global de erros: falha no eBay vira 502, o resto vira 500.
+app.UseExceptionHandler(erro => erro.Run(async contexto =>
+{
+    var ex = contexto.Features.Get<IExceptionHandlerFeature>()?.Error;
+
+    if (ex is ServicoExternoException)
+    {
+        contexto.Response.StatusCode = StatusCodes.Status502BadGateway;
+        await contexto.Response.WriteAsJsonAsync(new { erro = ex.Message });
+    }
+    else
+    {
+        contexto.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        await contexto.Response.WriteAsJsonAsync(new { erro = "Erro interno no servidor." });
+    }
+}));
+
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.MapOpenApi(); // documento em /openapi/v1.json
 }
 
 app.UseHttpsRedirection();
+app.UseCors();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapEbayEndpoints();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

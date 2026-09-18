@@ -1,6 +1,17 @@
-@MediaSaver.Api_HostAddress = http://localhost:5095
+@host = http://localhost:5095
 
-GET {{MediaSaver.Api_HostAddress}}/weatherforecast/
+### Buscar anúncios
+GET {{host}}/api/ebay/anuncios?busca=vhs&limite=10
 Accept: application/json
 
-###
+### Buscar em uma categoria (11232 = Movies & TV no EBAY_US)
+GET {{host}}/api/ebay/anuncios?busca=betamax&categoriaId=11232
+Accept: application/json
+
+### Detalhes de um anúncio (copie um "id" da busca acima)
+GET {{host}}/api/ebay/anuncios/v1|123456789012|0
+Accept: application/json
+
+### Sem o parâmetro busca -> 400
+GET {{host}}/api/ebay/anuncios
+Accept: application/json
