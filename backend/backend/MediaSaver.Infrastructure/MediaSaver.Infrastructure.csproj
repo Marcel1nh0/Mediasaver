@@ -1,7 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\MediaSaver.Domain\MediaSaver.Domain.csproj" />
+    <ProjectReference Include="..\MediaSaver.Application\MediaSaver.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Traz HttpClientFactory, Options, Logging e Configuration -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <PropertyGroup>
