@@ -7,18 +7,18 @@ create table Usuar(
     email varchar(50) not null,
     senha varchar(50) not null,
     adm tinyint(1) default FALSE,
-    karma tinyint -- maximo de 127 tá, é que é um byte e pode ser negativo
+    karma smallint default 0
 );
 
 create table Post(
     id int unsigned auto_increment,
     idUsuar int unsigned,
-    titulo varchar(40) not null,
-    descricao varchar(50),
-    marca varchar(20),
-    anoLancamento int unsigned,
+    titulo varchar(50) not null,
+    descricao varchar(200),
+    marca varchar(25),
+    anoLancamento smallint unsigned,
     karma tinyint,
-    qtdimagem tinyint unsigned default 0,
+    qtdimagem tinyint unsigned default 0, -- a ideia é ter um limite de imagens 
     qtdcomments tinyint unsigned default 0,
     primary key(id),
     foreign key (idUsuar) references Usuar(id)
