@@ -1,0 +1,113 @@
+.perfil-conteudo {
+    flex: 1;
+
+    padding: 22px 60px 35px;
+
+    background: #f4eee2;
+}
+
+.perfil-conteudo h2 {
+    margin: 0 0 30px;
+
+    text-align: center;
+
+    font-family: Georgia, serif;
+    font-size: 17px;
+    font-weight: normal;
+}
+
+.perfil-form {
+    width: min(100%, 1000px);
+
+    margin: auto;
+
+    display: grid;
+    grid-template-columns: 150px 1fr;
+
+    gap: 25px;
+}
+
+.perfil-foto {
+    width: 130px;
+    height: 125px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    border: 1px dashed #d5b38e;
+    border-radius: 9px;
+
+    color: #9a7659;
+    background: transparent;
+
+    font-family: Georgia, serif;
+    font-size: 10px;
+}
+
+.campo {
+    margin-bottom: 12px;
+}
+
+.campo label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-family: Georgia, serif;
+    font-size: 9px;
+}
+
+.campo input,
+.campo textarea {
+    width: 100%;
+
+    padding: 8px;
+
+    border: 1px solid #e4d7c8;
+    border-radius: 5px;
+
+    outline: none;
+
+    background: white;
+
+    font-size: 10px;
+}
+
+.campo textarea {
+    height: 43px;
+    resize: none;
+}
+
+.perfil-botao {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.perfil-botao button {
+    padding: 8px 18px;
+
+    border: 0;
+    border-radius: 5px;
+
+    color: white;
+    background: #b94b35;
+
+    font-family: Georgia, serif;
+    font-size: 10px;
+}
+
+@media (max-width: 650px) {
+
+    .perfil-conteudo {
+        padding: 25px 20px;
+    }
+
+    .perfil-form {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,90 @@
+.doacao-conteudo {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    background: #f4eee2;
+}
+
+.doacao-caixa {
+    width: min(100%, 430px);
+
+    padding: 35px;
+
+    border-radius: 8px;
+
+    background: #eee1cd;
+
+    text-align: center;
+
+    color: #76513e;
+
+    box-shadow:
+            0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+.doacao-caixa svg {
+    color: #b94b35;
+}
+
+.doacao-caixa h2 {
+    margin: 12px 0 8px;
+
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.doacao-caixa p {
+    margin: 0 0 25px;
+
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.pix {
+    padding: 15px;
+
+    border-radius: 6px;
+
+    background: white;
+}
+
+.pix span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-family: Georgia, serif;
+    font-size: 9px;
+}
+
+.pix strong {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #4d382b;
+
+    font-size: 10px;
+}
+
+.pix button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 7px 12px;
+
+    border: 0;
+    border-radius: 5px;
+
+    color: white;
+    background: #b94b35;
+
+    font-size: 9px;
+}

@@ -1,0 +1,157 @@
+.login-conteudo {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 35px 20px;
+
+    background: #f4eee2;
+}
+
+.login-caixa {
+    width: min(100%, 650px);
+
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+
+    background: white;
+
+    border-radius: 6px;
+
+    overflow: hidden;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.login-mensagem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 210px;
+
+    background: #eee1cd;
+
+    text-align: center;
+
+    font-family: Georgia, serif;
+}
+
+.login-logo {
+    font-size: 45px;
+}
+
+.login-mensagem p {
+    margin: 10px 0 0;
+
+    color: #76513e;
+
+    font-size: 13px;
+}
+
+.login-form {
+    padding: 15px 20px;
+}
+
+.login-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    margin-bottom: 15px;
+}
+
+.login-tabs button {
+    padding: 5px;
+
+    border: 0;
+    border-bottom: 1px solid #e1c6b2;
+
+    color: #76513e;
+
+    background: transparent;
+
+    font-family: Georgia, serif;
+    font-size: 10px;
+}
+
+.login-tabs button.ativo {
+    border-bottom: 2px solid #b94b35;
+}
+
+.login-campo {
+    margin-bottom: 9px;
+}
+
+.login-campo label {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #654c3a;
+
+    font-family: Georgia, serif;
+    font-size: 8px;
+}
+
+.login-campo input {
+    width: 100%;
+
+    padding: 7px;
+
+    border: 1px solid #d9b39b;
+    border-radius: 5px;
+
+    outline: none;
+
+    font-size: 9px;
+}
+
+.login-submit {
+    width: 100%;
+
+    margin-top: 7px;
+
+    padding: 7px;
+
+    border: 0;
+    border-radius: 5px;
+
+    color: white;
+    background: #b94b35;
+
+    font-family: Georgia, serif;
+    font-size: 10px;
+}
+
+.troca-login {
+    margin: 9px 0 0;
+
+    text-align: center;
+
+    color: #806a58;
+
+    font-size: 8px;
+}
+
+.troca-login button {
+    border: 0;
+
+    color: #b94b35;
+    background: transparent;
+
+    font-size: 8px;
+}
+
+@media (max-width: 600px) {
+
+    .login-caixa {
+        grid-template-columns: 1fr;
+    }
+
+    .login-mensagem {
+        min-height: 140px;
+    }
+}

@@ -1,0 +1,194 @@
+.cadastro-conteudo {
+    flex: 1;
+
+    padding: 22px 24px 32px;
+
+    background: #f4eee2;
+}
+
+.cadastro-conteudo h2 {
+    margin: 0 0 20px;
+
+    text-align: center;
+
+    font-family: Georgia, serif;
+    font-size: 17px;
+    font-weight: normal;
+
+    color: #4d382b;
+}
+
+.cadastro-form {
+    width: min(100%, 1080px);
+
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: 180px 1fr;
+
+    gap: 20px;
+}
+
+.fotos {
+    position: relative;
+}
+
+.fotos > label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-family: Georgia, serif;
+    font-size: 10px;
+}
+
+.contador-fotos {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    font-size: 8px;
+    color: #806a58;
+}
+
+.fotos-lista {
+    display: flex;
+    gap: 6px;
+}
+
+.adicionar-foto,
+.foto-preview {
+    width: 58px;
+    height: 54px;
+
+    border-radius: 8px;
+}
+
+.adicionar-foto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #9b7659;
+
+    border: 1px dashed #cda77f;
+
+    background: transparent;
+}
+
+.foto-preview {
+    background: linear-gradient(
+            110deg,
+            #7f5130,
+            #d8945d
+    );
+}
+
+.formulario {
+    width: 100%;
+}
+
+.campo {
+    margin-bottom: 10px;
+}
+
+.campo-label {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 3px;
+}
+
+.campo-label label {
+    font-family: Georgia, serif;
+    font-size: 9px;
+    color: #5c4536;
+}
+
+.campo-label span {
+    font-size: 7px;
+    color: #8a6c56;
+}
+
+.campo input,
+.campo textarea {
+    width: 100%;
+
+    border: 1px solid #eadfd0;
+    border-radius: 5px;
+
+    background: white;
+
+    padding: 7px;
+
+    outline: none;
+
+    font-size: 9px;
+}
+
+.campo textarea {
+    height: 42px;
+    resize: none;
+}
+
+.campo input:focus,
+.campo textarea:focus {
+    border-color: #bd684e;
+}
+
+.linha-campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+}
+
+.cadastro-botoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+
+    margin-top: 16px;
+}
+
+.botao {
+    min-width: 102px;
+    padding: 7px 14px;
+
+    border-radius: 5px;
+
+    font-family: Georgia, serif;
+    font-size: 10px;
+
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+.cancelar {
+    border: 1px solid #bd684e;
+    color: #bd684e;
+    background: transparent;
+}
+
+.publicar {
+    border: 0;
+    color: white;
+    background: #b94b35;
+}
+
+@media (max-width: 700px) {
+
+    .cadastro-form {
+        grid-template-columns: 1fr;
+    }
+
+    .fotos-lista {
+        margin-bottom: 15px;
+    }
+
+    .linha-campos {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
