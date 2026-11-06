@@ -19,40 +19,60 @@ const icones = {
 function Posts({ post }) {
 
     const Icone = icones[post.icone] || Camera;
+    const destino = post.ebay
+        ? `/post?ebayId=${encodeURIComponent(post.id)}`
+        : `/post?id=${post.id}`;
+
+    let precoFormatado = "";
+    if (post.ebay && post.preco !== null && post.preco !== undefined) {
+        try {
+            precoFormatado = new Intl.NumberFormat("pt-BR", {
+                style: "currency",
+                currency: post.moeda || "USD",
+            }).format(post.preco);
+        } catch {
+            precoFormatado = `${post.preco} ${post.moeda || ""}`.trim();
+        }
+    }
 
     return (
-        <Link className="post" to={`/post?id=${post.id}`}>
+        <Link className="post" to={destino}>
 
-            {/* Imagem provisória */}
             <div className="post-imagem">
-                <Icone size={36} strokeWidth={1.7} />
+                {post.imagemUrl
+                    ? <img src={post.imagemUrl} alt={post.nome} loading="lazy" />
+                    : <Icone size={36} strokeWidth={1.7} />}
             </div>
 
-            {/* Informações do item */}
             <div className="post-conteudo">
 
                 <h3>{post.nome}</h3>
 
                 <p className="post-descricao">
-                    {post.marca && post.ano
+                    {precoFormatado || (post.marca && post.ano
                         ? `${post.marca} • ${post.ano}`
-                        : post.marca || (post.ano ?? "")}
+                        : post.marca || (post.ano ?? ""))}
                 </p>
 
-                {/* Votos e comentários */}
-                <div className="post-informacoes">
+                {post.ebay ? (
+                    <div className="post-informacoes">
+                        <span>Anúncio do eBay</span>
+                    </div>
+                ) : (
+                    <div className="post-informacoes">
 
-                    <span>
-                        <span className="post-voto-icone" aria-hidden="true">▲</span>
-                        {post.votos}
-                    </span>
+                        <span>
+                            <span className="post-voto-icone" aria-hidden="true">▲</span>
+                            {post.votos}
+                        </span>
 
-                    <span>
-                        <MessageSquare size={13} />
-                        {post.comentarios}
-                    </span>
+                        <span>
+                            <MessageSquare size={13} />
+                            {post.comentarios}
+                        </span>
 
-                </div>
+                    </div>
+                )}
 
             </div>
 

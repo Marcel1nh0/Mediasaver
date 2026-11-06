@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Camera,
     Plus,
@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { obterAnuncio } from "../../services/ebayApi";
 
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
@@ -31,6 +32,7 @@ function Post() {
             : []
     );
     const comentario = rascunhosPorPost[item.id] ?? "";
+    const ebayId = searchParams.get("ebayId");
 
     function enviarComentario(evento) {
         evento.preventDefault();
@@ -42,6 +44,8 @@ function Post() {
         }));
         setRascunhosPorPost((atuais) => ({ ...atuais, [item.id]: "" }));
     }
+
+    if (ebayId) return <DetalheAnuncio id={ebayId} />;
 
     return (
         <div className="page">
@@ -153,6 +157,84 @@ function Post() {
 
             <Footer />
 
+        </div>
+    );
+}
+
+function DetalheAnuncio({ id }) {
+    const [resposta, setResposta] = useState({ id: null, anuncio: null, erro: "", carregando: true });
+
+    useEffect(() => {
+        const controlador = new AbortController();
+
+        obterAnuncio(id, controlador.signal)
+            .then((anuncio) => setResposta({ id, anuncio, erro: "", carregando: false }))
+            .catch((falha) => {
+                if (falha.name !== "AbortError") {
+                    setResposta({ id, anuncio: null, erro: falha.message, carregando: false });
+                }
+            });
+
+        return () => controlador.abort();
+    }, [id]);
+
+    const carregando = resposta.id !== id || resposta.carregando;
+    const erro = resposta.id === id ? resposta.erro : "";
+    const anuncio = resposta.id === id ? resposta.anuncio : null;
+
+    const preco = anuncio?.preco === null || anuncio?.preco === undefined
+        ? "Preço indisponível"
+        : (() => {
+            try {
+                return new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: anuncio.moeda || "USD",
+                }).format(anuncio.preco);
+            } catch {
+                return `${anuncio.preco} ${anuncio.moeda || ""}`.trim();
+            }
+        })();
+
+    return (
+        <div className="page">
+            <Header />
+            <main className="post-page">
+                {carregando ? (
+                    <p className="sem-resultados">Carregando anúncio...</p>
+                ) : erro ? (
+                    <p className="sem-resultados" role="alert">{erro}</p>
+                ) : anuncio ? (
+                    <section className="post-detalhes">
+                        <div>
+                            <div className="imagem-principal ebay-imagem-principal">
+                                {anuncio.imagens?.[0]
+                                    ? <img src={anuncio.imagens[0]} alt={anuncio.titulo} />
+                                    : <Camera size={80} />}
+                            </div>
+                            {anuncio.imagens?.length > 1 && (
+                                <div className="miniaturas">
+                                    {anuncio.imagens.slice(1, 4).map((imagem) => (
+                                        <div key={imagem}><img src={imagem} alt="" /></div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <div className="post-texto">
+                            <div className="post-titulo"><div><h2>{anuncio.titulo}</h2><p>{anuncio.condicao}</p></div></div>
+                            <p className="descricao">{preco}</p>
+                            {anuncio.descricao && <p className="descricao">{anuncio.descricao}</p>}
+                            {anuncio.vendedor && <p className="autor">Vendedor: {anuncio.vendedor}</p>}
+                            {anuncio.localizacao && <p className="autor">Localização: {anuncio.localizacao}</p>}
+                            {anuncio.linkEbay && (
+                                <a className="ver-eBay" href={anuncio.linkEbay} target="_blank" rel="noreferrer">
+                                    Ver no eBay
+                                </a>
+                            )}
+                        </div>
+                    </section>
+                ) : null}
+            </main>
+            <Footer />
         </div>
     );
 }

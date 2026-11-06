@@ -7,6 +7,14 @@ import process from 'node:process'
 // https://vite.dev/config/
 export default defineConfig({
   base: process.env.GITHUB_ACTIONS === 'true' ? '/Mediasaver/' : '/',
+  server: {
+    proxy: {
+      '/api': {
+        target: process.env.MEDIASAVER_API_URL || 'http://localhost:5095',
+        changeOrigin: true,
+      },
+    },
+  },
   plugins: [
     react(),
     {

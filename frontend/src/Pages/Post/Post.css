@@ -37,6 +37,17 @@
     );
 }
 
+.imagem-principal img,
+.miniaturas img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.ebay-imagem-principal img {
+    border-radius: inherit;
+}
+
 .miniaturas {
     display: flex;
     gap: 14px;
