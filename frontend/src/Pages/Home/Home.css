@@ -17,6 +17,18 @@
     background-color: #f4eee2;
 }
 
+.catalogo-titulo {
+    margin: 60px 0 -52px;
+    color: #40352e;
+    font-family: Georgia, serif;
+    font-size: 26px;
+    font-weight: 500;
+}
+
+.catalogo-titulo-ebay {
+    margin-top: 54px;
+}
+
 .posts {
     display: grid;
 
@@ -25,6 +37,27 @@
     gap: 26px;
 
     margin: 80px -17px 0;
+}
+
+.catalogo-paginacao {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+}
+
+.catalogo-paginacao button {
+    padding: 12px 24px;
+    border: 1px solid #b94b35;
+    border-radius: 9px;
+    color: #b94b35;
+    background: white;
+    font: inherit;
+    cursor: pointer;
+}
+
+.catalogo-paginacao button:disabled {
+    cursor: wait;
+    opacity: 0.65;
 }
 
 .sem-resultados {
@@ -57,6 +90,15 @@
     .posts {
         gap: 12px;
         margin: 34px 0 0;
+    }
+
+    .catalogo-titulo {
+        margin: 36px 0 -20px;
+        font-size: 22px;
+    }
+
+    .catalogo-titulo-ebay {
+        margin-top: 36px;
     }
 
     .post-imagem {

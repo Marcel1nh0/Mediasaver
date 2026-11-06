@@ -1,5 +1,6 @@
 using MediaSaver.Api.Ebay;
 using MediaSaver.Api.Endpoints;
+using MediaSaver.Api.Posts;
 using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.Configure<EbayOptions>(builder.Configuration.GetSection(EbayOpt
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<EbayTokenProvider>();
 builder.Services.AddHttpClient<IEbayService, EbayService>(c => c.Timeout = TimeSpan.FromSeconds(15));
+builder.Services.AddScoped<IPostCatalogoService, PostCatalogoService>();
 
 builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
     p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
@@ -20,9 +22,12 @@ var app = builder.Build();
 app.UseExceptionHandler(erro => erro.Run(async contexto =>
 {
     var ex = contexto.Features.Get<IExceptionHandlerFeature>()?.Error;
-    var (status, mensagem) = ex is ServicoExternoException
-        ? (StatusCodes.Status502BadGateway, ex.Message)
-        : (StatusCodes.Status500InternalServerError, "Erro interno no servidor.");
+    var (status, mensagem) = ex switch
+    {
+        ServicoExternoException => (StatusCodes.Status502BadGateway, ex.Message),
+        CatalogoIndisponivelException => (StatusCodes.Status503ServiceUnavailable, ex.Message),
+        _ => (StatusCodes.Status500InternalServerError, "Erro interno no servidor.")
+    };
 
     contexto.Response.StatusCode = status;
     await contexto.Response.WriteAsJsonAsync(new { erro = mensagem });
@@ -35,5 +40,6 @@ app.UseHttpsRedirection();
 app.UseCors();
 
 app.MapEbayEndpoints();
+app.MapPostEndpoints();
 
 app.Run();

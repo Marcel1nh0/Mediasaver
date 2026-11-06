@@ -6,8 +6,8 @@ import Buscador from "../../components/Buscador/Buscador";
 import Posts from "../../components/Posts/Posts.jsx";
 import Footer from "../../components/Footer/Footer";
 
-import { posts } from "../../data/data";
 import { buscarAnuncios } from "../../services/ebayApi";
+import { buscarPosts } from "../../services/postsApi";
 import Doacao from "../Doacao/Doacao";
 
 import "./Home.css";
@@ -15,32 +15,69 @@ import "./Home.css";
 function Home() {
 
     const [busca, setBusca] = useState("");
-    const [resultadoBusca, setResultadoBusca] = useState(null);
-    const [carregando, setCarregando] = useState(false);
-    const [erroBusca, setErroBusca] = useState("");
+    const [resultadoCatalogo, setResultadoCatalogo] = useState(null);
+    const [carregandoCatalogo, setCarregandoCatalogo] = useState(true);
+    const [erroCatalogo, setErroCatalogo] = useState("");
+    const [resultadoEbay, setResultadoEbay] = useState(null);
+    const [carregandoEbay, setCarregandoEbay] = useState(false);
+    const [erroEbay, setErroEbay] = useState("");
+    const [offset, setOffset] = useState(0);
     const location = useLocation();
 
     useEffect(() => {
         const termo = busca.trim();
+        const controlador = new AbortController();
+        const temporizador = setTimeout(async () => {
+            setCarregandoCatalogo(true);
+            setErroCatalogo("");
 
+            try {
+                const resultado = await buscarPosts(termo, 20, offset, controlador.signal);
+                if (!controlador.signal.aborted) {
+                    setResultadoCatalogo((atual) => ({
+                        ...resultado,
+                        posts: offset === 0
+                            ? resultado.posts
+                            : [...(atual?.posts ?? []), ...resultado.posts],
+                    }));
+                }
+            } catch (erro) {
+                if (erro.name !== "AbortError") {
+                    setErroCatalogo(erro.message);
+                    setResultadoCatalogo(null);
+                }
+            } finally {
+                if (!controlador.signal.aborted) setCarregandoCatalogo(false);
+            }
+        }, termo || offset ? 300 : 0);
+
+        return () => {
+            clearTimeout(temporizador);
+            controlador.abort();
+        };
+    }, [busca, offset]);
+
+    useEffect(() => {
+        const termo = busca.trim();
         if (!termo) return undefined;
 
         const controlador = new AbortController();
         const temporizador = setTimeout(() => {
-            setResultadoBusca(null);
-            setCarregando(true);
-            setErroBusca("");
+            setCarregandoEbay(true);
+            setErroEbay("");
 
             buscarAnuncios(termo, controlador.signal)
-                .then(setResultadoBusca)
+                .then((resultado) => {
+                    if (!controlador.signal.aborted) setResultadoEbay(resultado);
+                })
                 .catch((erro) => {
                     if (erro.name !== "AbortError") {
-                        setErroBusca(erro.message);
-                        setResultadoBusca(null);
+                        setErroEbay(erro.message);
+                        setResultadoEbay(null);
                     }
                 })
                 .finally(() => {
-                    if (!controlador.signal.aborted) setCarregando(false);
+                    if (!controlador.signal.aborted) setCarregandoEbay(false);
                 });
         }, 350);
 
@@ -52,24 +89,12 @@ function Home() {
 
     function atualizarBusca(valor) {
         setBusca(valor);
-        if (!valor.trim()) {
-            setResultadoBusca(null);
-            setCarregando(false);
-            setErroBusca("");
-        }
+        setOffset(0);
+        setResultadoCatalogo(null);
+        setResultadoEbay(null);
+        setErroCatalogo("");
+        setErroEbay("");
     }
-
-    const postsFiltrados = posts.filter((post) => {
-
-        const termo = busca.toLowerCase();
-
-        return (
-            post.nome.toLowerCase().includes(termo) ||
-            post.marca.toLowerCase().includes(termo) ||
-            post.categoria.toLowerCase().includes(termo)
-        );
-
-    });
 
     return (
         <div className="home">
@@ -83,48 +108,70 @@ function Home() {
                     setValor={atualizarBusca}
                 />
 
+                <h2 className="catalogo-titulo">Catálogo da comunidade</h2>
                 <section className="posts" aria-live="polite">
-
-                    {carregando ? (
-                        <p className="sem-resultados">Buscando anúncios...</p>
-                    ) : erroBusca ? (
-                        <p className="sem-resultados" role="alert">{erroBusca}</p>
-                    ) : busca.trim() ? (
-                        resultadoBusca?.anuncios?.length ? (
-                            resultadoBusca.anuncios.map((anuncio) => (
-                                <Posts key={anuncio.id} post={{
-                                    id: anuncio.id,
-                                    nome: anuncio.titulo,
-                                    marca: anuncio.condicao || anuncio.vendedor || "",
-                                    imagemUrl: anuncio.imagemUrl,
-                                    preco: anuncio.preco,
-                                    moeda: anuncio.moeda,
-                                    ebay: true,
-                                }} />
-                            ))
-                        ) : resultadoBusca ? (
-                            <p className="sem-resultados">Nenhum anúncio encontrado.</p>
-                        ) : null
-                    ) : postsFiltrados.length > 0 ? (
-
-                        postsFiltrados.map((post) => (
-
-                            <Posts
-                                key={post.id}
-                                post={post}
-                            />
-
+                    {erroCatalogo ? (
+                        <p className="sem-resultados" role="alert">{erroCatalogo}</p>
+                    ) : resultadoCatalogo?.posts.length ? (
+                        resultadoCatalogo.posts.map((post) => (
+                            <Posts key={post.id} post={{
+                                id: post.id,
+                                nome: post.titulo,
+                                marca: post.marca || post.autor || "",
+                                ano: post.anoLancamento,
+                                votos: post.karma,
+                                comentarios: post.quantidadeComentarios,
+                                imagemUrl: post.imagemUrl,
+                            }} />
                         ))
-
+                    ) : carregandoCatalogo ? (
+                        <p className="sem-resultados">Carregando catálogo...</p>
                     ) : (
-
                         <p className="sem-resultados">
-                            Nenhum item encontrado.
+                            {busca.trim()
+                                ? "Nenhuma publicação encontrada."
+                                : "O catálogo ainda não tem publicações."}
                         </p>
-
                     )}
-
                 </section>
+                {resultadoCatalogo && resultadoCatalogo.posts.length < resultadoCatalogo.total && (
+                    <div className="catalogo-paginacao">
+                        <button
+                            type="button"
+                            onClick={() => setOffset(resultadoCatalogo.posts.length)}
+                            disabled={carregandoCatalogo}
+                        >
+                            {carregandoCatalogo ? "Carregando..." : "Carregar mais"}
+                        </button>
+                    </div>
+                )}
+
+                {busca.trim() && (
+                    <>
+                        <h2 className="catalogo-titulo catalogo-titulo-ebay">Anúncios do eBay</h2>
+                        <section className="posts" aria-live="polite">
+                            {erroEbay ? (
+                                <p className="sem-resultados" role="alert">{erroEbay}</p>
+                            ) : resultadoEbay?.anuncios?.length ? (
+                                resultadoEbay.anuncios.map((anuncio) => (
+                                    <Posts key={anuncio.id} post={{
+                                        id: anuncio.id,
+                                        nome: anuncio.titulo,
+                                        marca: anuncio.condicao || anuncio.vendedor || "",
+                                        imagemUrl: anuncio.imagemUrl,
+                                        preco: anuncio.preco,
+                                        moeda: anuncio.moeda,
+                                        ebay: true,
+                                    }} />
+                                ))
+                            ) : carregandoEbay ? (
+                                <p className="sem-resultados">Buscando anúncios...</p>
+                            ) : (
+                                <p className="sem-resultados">Nenhum anúncio encontrado.</p>
+                            )}
+                        </section>
+                    </>
+                )}
 
             </main>
 

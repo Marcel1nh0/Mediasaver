@@ -8,31 +8,52 @@ import {
 
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { obterAnuncio } from "../../services/ebayApi";
+import { obterPost } from "../../services/postsApi";
 
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import { posts } from "../../data/data";
 
 import "./Post.css";
 
 function Post() {
-    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const item = posts.find((post) => post.id === Number(searchParams.get("id"))) || posts[0];
+    const ebayId = searchParams.get("ebayId");
+
+    return ebayId
+        ? <DetalheAnuncio id={ebayId} />
+        : <DetalhePost id={searchParams.get("id")} />;
+}
+
+function DetalhePost({ id }) {
+    const navigate = useNavigate();
+    const [resposta, setResposta] = useState({ id: null, post: null, erro: "", carregando: true });
     const [votosPorPost, setVotosPorPost] = useState({});
     const [comentariosPorPost, setComentariosPorPost] = useState({});
     const [rascunhosPorPost, setRascunhosPorPost] = useState({});
-    const votos = votosPorPost[item.id] ?? item.votos;
-    const comentarios = comentariosPorPost[item.id] ?? (
-        item.id === 1
-            ? [
-                "Ana: Lembro de uma igual na casa do meu avô!",
-                "Pedro: Ainda funciona com filme?",
-            ]
-            : []
-    );
-    const comentario = rascunhosPorPost[item.id] ?? "";
-    const ebayId = searchParams.get("ebayId");
+
+    useEffect(() => {
+        if (!id) return undefined;
+
+        const controlador = new AbortController();
+        obterPost(id, controlador.signal)
+            .then((post) => setResposta({ id, post, erro: "", carregando: false }))
+            .catch((erro) => {
+                if (erro.name !== "AbortError") {
+                    setResposta({ id, post: null, erro: erro.message, carregando: false });
+                }
+            });
+
+        return () => controlador.abort();
+    }, [id]);
+
+    const carregando = Boolean(id) && (resposta.id !== id || resposta.carregando);
+    const erro = !id
+        ? "Post não informado."
+        : resposta.id === id ? resposta.erro : "";
+    const item = resposta.id === id ? resposta.post : null;
+    const votos = votosPorPost[id] ?? item?.karma ?? 0;
+    const comentarios = comentariosPorPost[id] ?? [];
+    const comentario = rascunhosPorPost[id] ?? "";
 
     function enviarComentario(evento) {
         evento.preventDefault();
@@ -40,12 +61,24 @@ function Post() {
         if (!texto) return;
         setComentariosPorPost((atuais) => ({
             ...atuais,
-            [item.id]: [...comentarios, `Você: ${texto}`],
+            [id]: [...comentarios, `Você: ${texto}`],
         }));
-        setRascunhosPorPost((atuais) => ({ ...atuais, [item.id]: "" }));
+        setRascunhosPorPost((atuais) => ({ ...atuais, [id]: "" }));
     }
 
-    if (ebayId) return <DetalheAnuncio id={ebayId} />;
+    if (carregando || erro || !item) {
+        return (
+            <div className="page">
+                <Header />
+                <main className="post-page">
+                    <p className="sem-resultados" role={erro ? "alert" : undefined}>
+                        {carregando ? "Carregando publicação..." : erro || "Publicação não encontrada."}
+                    </p>
+                </main>
+                <Footer />
+            </div>
+        );
+    }
 
     return (
         <div className="page">
@@ -59,7 +92,9 @@ function Post() {
                     <div className="post-imagens">
 
                         <div className="imagem-principal">
-                            <Camera size={80} />
+                            {item.imagemUrl
+                                ? <img src={item.imagemUrl} alt={item.titulo} />
+                                : <Camera size={80} />}
                         </div>
 
                         <div className="miniaturas">
@@ -83,11 +118,11 @@ function Post() {
                             <div>
 
                                 <h2>
-                                    {item.nome}
+                                    {item.titulo}
                                 </h2>
 
                                 <p>
-                                    {[item.marca, item.ano].filter(Boolean).join(" • ")}
+                                    {[item.marca, item.anoLancamento].filter(Boolean).join(" • ")}
                                 </p>
 
                             </div>
@@ -102,26 +137,22 @@ function Post() {
                         </div>
 
                         <p className="descricao">
-                            {item.id === 1 ? "Câmera de vídeo em ótimo estado." : `Item de acervo: ${item.categoria}.`}
+                            {item.descricao || "Esta publicação não possui descrição."}
                         </p>
 
                         <p className="autor">
-                            Por Marcelo Queiroz
+                            Por {item.autor || "Autor desconhecido"}
                         </p>
 
                         <div className="voto" aria-label={`${votos} votos`}>
-                            <button type="button" aria-label="Votar a favor" onClick={() => setVotosPorPost((atuais) => ({ ...atuais, [item.id]: votos + 1 }))}>
+                            <button type="button" aria-label="Votar a favor" onClick={() => setVotosPorPost((atuais) => ({ ...atuais, [id]: votos + 1 }))}>
                                 <Triangle size={18} fill="currentColor" />
                             </button>
                             <span>{votos}</span>
-                            <button type="button" aria-label="Votar contra" onClick={() => setVotosPorPost((atuais) => ({ ...atuais, [item.id]: votos - 1 }))}>
+                            <button type="button" aria-label="Votar contra" onClick={() => setVotosPorPost((atuais) => ({ ...atuais, [id]: votos - 1 }))}>
                                 <Triangle className="voto-contra" size={18} fill="currentColor" />
                             </button>
                         </div>
-
-                        <a className="ver-eBay" href="https://www.ebay.com" target="_blank" rel="noreferrer">
-                            Ver no eBay
-                        </a>
 
                     </div>
 
@@ -129,7 +160,7 @@ function Post() {
 
                 <section className="comentarios">
 
-                    <h3><MessageSquare size={20} /> Comentários({comentarios.length})</h3>
+                    <h3><MessageSquare size={20} /> Comentários({item.quantidadeComentarios + comentarios.length})</h3>
 
                     <div className="comentarios-lista" aria-live="polite">
                         {comentarios.map((texto, indice) => <p className="comentario" key={`${indice}-${texto}`}>{texto}</p>)}
@@ -141,7 +172,7 @@ function Post() {
                             type="text"
                             placeholder="Escreva um comentário..."
                             value={comentario}
-                            onChange={(evento) => setRascunhosPorPost((atuais) => ({ ...atuais, [item.id]: evento.target.value }))}
+                            onChange={(evento) => setRascunhosPorPost((atuais) => ({ ...atuais, [id]: evento.target.value }))}
                             aria-label="Escreva um comentário"
                         />
 
