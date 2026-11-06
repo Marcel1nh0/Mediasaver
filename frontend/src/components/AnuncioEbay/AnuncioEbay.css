@@ -1,0 +1,22 @@
+.anuncio-imagem {
+    background: white;
+}
+
+.ficha-corpo h3.anuncio-titulo {
+    font-size: 19px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.anuncio-preco {
+    margin: 0 0 6px;
+
+    color: var(--ferrugem);
+
+    font-family: var(--mono);
+    font-size: 17px;
+    font-weight: 600;
+}

@@ -1,90 +1,96 @@
-.doacao-conteudo {
-    flex: 1;
-
-    display: flex;
+.doacao-grade {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 440px;
     align-items: center;
-    justify-content: center;
+    gap: 64px;
 
-    padding: 30px;
+    padding-top: 48px;
+}
 
-    background: #f4eee2;
+.doacao-grade h1 {
+    margin: 22px 0 18px;
+
+    font-family: var(--serifa);
+    font-size: clamp(40px, 5vw, 60px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+.doacao-grade h1 em {
+    display: block;
+
+    color: var(--ferrugem);
+}
+
+.doacao-texto {
+    max-width: 470px;
+
+    margin: 0;
+
+    color: var(--tinta-suave);
+
+    font-size: 17px;
+    line-height: 1.65;
 }
 
 .doacao-caixa {
-    width: min(100%, 430px);
-
-    padding: 35px;
-
-    border-radius: 8px;
-
-    background: #eee1cd;
-
-    text-align: center;
-
-    color: #76513e;
-
-    box-shadow:
-            0 2px 4px rgba(0, 0, 0, 0.12);
+    padding: 0 28px 28px;
 }
 
-.doacao-caixa svg {
-    color: #b94b35;
-}
+.doacao-caixa-topo {
+    display: flex;
+    justify-content: space-between;
 
-.doacao-caixa h2 {
-    margin: 12px 0 8px;
+    margin: 0 -28px 24px;
+    padding: 14px 28px;
 
-    font-family: Georgia, serif;
-    font-size: 20px;
-    font-weight: normal;
-}
+    border-bottom: 1px dashed var(--tracejado);
 
-.doacao-caixa p {
-    margin: 0 0 25px;
+    color: var(--ferrugem);
 
+    font-family: var(--mono);
     font-size: 11px;
-    line-height: 1.6;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
 }
 
-.pix {
-    padding: 15px;
+.doacao-rotulo {
+    margin: 0 0 6px;
 
-    border-radius: 6px;
+    color: var(--tinta-suave);
 
-    background: white;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
 }
 
-.pix span {
-    display: block;
+.doacao-chave {
+    margin: 0 0 22px;
 
-    margin-bottom: 5px;
-
-    font-family: Georgia, serif;
-    font-size: 9px;
+    font-family: var(--serifa);
+    font-size: 28px;
+    word-break: break-all;
 }
 
-.pix strong {
-    display: block;
-
-    margin-bottom: 10px;
-
-    color: #4d382b;
-
-    font-size: 10px;
+.doacao-caixa .botao {
+    width: 100%;
 }
 
-.pix button {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
+.doacao-nota {
+    margin: 18px 0 0;
 
-    padding: 7px 12px;
+    color: var(--cinza-mono);
 
-    border: 0;
-    border-radius: 5px;
+    font-family: var(--mono);
+    font-size: 11px;
+}
 
-    color: white;
-    background: #b94b35;
-
-    font-size: 9px;
+@media (max-width: 900px) {
+    .doacao-grade {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
 }

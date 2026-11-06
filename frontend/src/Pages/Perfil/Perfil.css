@@ -1,113 +1,227 @@
-.perfil-conteudo {
-    flex: 1;
+.perfil-cartao {
+    display: flex;
+    align-items: center;
+    gap: 32px;
 
-    padding: 22px 60px 35px;
-
-    background: #f4eee2;
+    margin-top: 34px;
+    padding: 36px 32px;
 }
 
-.perfil-conteudo h2 {
-    margin: 0 0 30px;
+.perfil-avatar {
+    position: relative;
 
-    text-align: center;
+    width: 96px;
+    height: 96px;
 
-    font-family: Georgia, serif;
-    font-size: 17px;
-    font-weight: normal;
+    flex-shrink: 0;
+
+    padding: 0;
+
+    overflow: hidden;
+
+    border: 0;
+    border-radius: 50%;
+
+    color: var(--papel);
+    background: var(--tinta);
+
+    font-family: var(--serifa);
+    font-size: 34px;
+    text-transform: uppercase;
 }
 
-.perfil-form {
-    width: min(100%, 1000px);
+.perfil-avatar img {
+    width: 100%;
+    height: 100%;
 
-    margin: auto;
-
-    display: grid;
-    grid-template-columns: 150px 1fr;
-
-    gap: 25px;
+    object-fit: cover;
 }
 
-.perfil-foto {
-    width: 130px;
-    height: 125px;
+/* Ao passar o mouse, aparece o ícone para trocar a foto */
+.perfil-avatar-trocar {
+    position: absolute;
+    inset: 0;
 
     display: flex;
-    flex-direction: column;
-
     align-items: center;
     justify-content: center;
 
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.perfil-avatar:hover .perfil-avatar-trocar,
+.perfil-avatar:focus-visible .perfil-avatar-trocar {
+    opacity: 1;
+}
+
+.perfil-dados {
+    flex: 1;
+    min-width: 0;
+}
+
+.perfil-rotulo {
+    margin: 0 0 10px;
+
+    color: var(--tinta-suave);
+
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.perfil-dados h1 {
+    margin: 0;
+
+    font-family: var(--serifa);
+    font-size: 50px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.perfil-email {
+    margin: 8px 0 0;
+    padding-bottom: 20px;
+
+    border-bottom: 1px dashed var(--tracejado);
+
+    color: var(--tinta-suave);
+
+    font-family: var(--mono);
+    font-size: 13px;
+}
+
+.perfil-numeros {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px 32px;
+
+    margin-top: 18px;
+}
+
+.perfil-numeros div {
+    display: flex;
+    flex-direction: column;
+}
+
+.perfil-numeros strong {
+    font-family: var(--serifa);
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.perfil-numeros span {
+    margin-top: 4px;
+
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.perfil-desde {
+    display: flex;
+    align-items: center;
     gap: 8px;
 
-    border: 1px dashed #d5b38e;
-    border-radius: 9px;
+    margin: 0 0 4px;
 
-    color: #9a7659;
-    background: transparent;
+    color: var(--cinza-mono);
 
-    font-family: Georgia, serif;
-    font-size: 10px;
+    font-family: var(--mono);
+    font-size: 12px;
 }
 
-.campo {
-    margin-bottom: 12px;
+.perfil-aviso {
+    margin: 16px 0 0;
+    font-size: 14px;
 }
 
-.campo label {
-    display: block;
-
-    margin-bottom: 4px;
-
-    font-family: Georgia, serif;
-    font-size: 9px;
+.perfil-sair {
+    align-self: center;
 }
 
-.campo input,
-.campo textarea {
-    width: 100%;
-
-    padding: 8px;
-
-    border: 1px solid #e4d7c8;
-    border-radius: 5px;
-
-    outline: none;
-
-    background: white;
-
-    font-size: 10px;
+.perfil-acervo {
+    margin-top: 56px;
 }
 
-.campo textarea {
-    height: 43px;
-    resize: none;
+.perfil-fichas {
+    margin-top: 24px;
 }
 
-.perfil-botao {
+/* Card tracejado "Publicar outra história" */
+.perfil-novo {
+    min-height: 420px;
+
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 32px;
+
+    border: 1px dashed var(--tracejado);
+
+    color: var(--tinta);
+
+    text-align: center;
+    text-decoration: none;
 }
 
-.perfil-botao button {
-    padding: 8px 18px;
-
-    border: 0;
-    border-radius: 5px;
-
-    color: white;
-    background: #b94b35;
-
-    font-family: Georgia, serif;
-    font-size: 10px;
+.perfil-novo svg {
+    color: var(--ferrugem);
 }
 
-@media (max-width: 650px) {
+.perfil-novo strong {
+    font-family: var(--serifa);
+    font-size: 24px;
+    font-weight: 400;
+}
 
-    .perfil-conteudo {
-        padding: 25px 20px;
+.perfil-novo span {
+    max-width: 190px;
+
+    color: var(--tinta-suave);
+    font-size: 14px;
+}
+
+.perfil-novo:hover {
+    border-color: var(--ferrugem);
+    background: rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 760px) {
+    .perfil-cartao {
+        flex-wrap: wrap;
+        gap: 22px;
+
+        padding: 26px 22px;
     }
 
-    .perfil-form {
-        grid-template-columns: 1fr;
+    .perfil-dados {
+        flex-basis: 100%;
+        order: 2;
+    }
+
+    .perfil-sair {
+        order: 1;
+        margin-left: auto;
+    }
+
+    .perfil-dados h1 {
+        font-size: 40px;
+    }
+
+    .perfil-novo {
+        min-height: 220px;
     }
 }

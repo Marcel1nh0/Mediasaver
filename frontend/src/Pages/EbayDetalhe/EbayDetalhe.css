@@ -1,0 +1,25 @@
+.ebay-foto {
+    background: white;
+}
+
+.ebay-foto img {
+    object-fit: contain;
+}
+
+.pp-titulo.ebay-titulo {
+    font-size: clamp(30px, 3.2vw, 40px);
+}
+
+.ebay-preco {
+    margin: 0 0 22px;
+
+    color: var(--ferrugem);
+
+    font-family: var(--mono);
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.ebay-acoes {
+    margin-top: 30px;
+}

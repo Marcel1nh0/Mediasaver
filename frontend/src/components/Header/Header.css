@@ -1,29 +1,171 @@
-.header {
-    height: 88px;
+/* Cabeçalho fixo no topo, com fundo translúcido */
+.topo {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    border-bottom: 1px solid var(--borda);
+
+    background: rgba(233, 232, 226, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.topo-interno {
+    min-height: 76px;
 
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.topo-marca {
+    text-decoration: none;
+}
+
+.topo-nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.topo-link {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 0;
+
+    color: var(--tinta-suave);
+
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.topo-link:hover {
+    color: var(--tinta);
+}
+
+/* Página atual: texto escuro com traço vermelho embaixo */
+.topo-link.active {
+    color: var(--tinta);
+    font-weight: 600;
+}
+
+.topo-link.active::after {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+
+    height: 2px;
+
+    background: var(--ferrugem);
+}
+
+.topo-divisor {
+    width: 1px;
+    height: 40px;
+
+    background: var(--borda);
+}
+
+.topo-usuario {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.topo-usuario.active .topo-nome {
+    text-decoration: underline;
+    text-decoration-color: var(--ferrugem);
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
+}
+
+.topo-usuario img,
+.topo-avatar {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 50%;
+}
+
+.topo-usuario img {
+    object-fit: cover;
+}
+
+.topo-avatar {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    background-color: #c58b5d;
+    color: var(--papel);
+    background: var(--tinta);
+
+    font-family: var(--serifa);
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.topo-sair {
+    margin-left: -8px;
+    padding: 6px 0;
+
+    border: 0;
+
+    color: var(--cinza-mono);
+    background: none;
+
+    font-size: 15px;
+    font-weight: 500;
 }
 
-.logo-icone {
-    font-size: 43px;
+.topo-sair:hover {
+    color: var(--tinta);
 }
 
-.logo h1 {
-    margin: 0;
+.topo-entrar {
+    min-height: 40px;
+    padding: 8px 16px;
+}
 
-    color: #fff8ed;
+@media (max-width: 720px) {
+    .topo-interno {
+        min-height: 64px;
+    }
 
-    font-family: Georgia, serif;
-    font-size: 34px;
-    font-weight: normal;
+    .topo-nav {
+        gap: 16px;
+    }
+
+    .topo-nome,
+    .topo-divisor {
+        display: none;
+    }
+
+    .topo-sair {
+        margin-left: 0;
+    }
+
+    .logo-texto {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 460px) {
+    .topo .logo-texto {
+        display: none;
+    }
 }

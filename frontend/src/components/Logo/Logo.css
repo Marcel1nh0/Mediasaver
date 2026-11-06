@@ -1,0 +1,29 @@
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+
+    color: var(--tinta);
+}
+
+.logo-texto {
+    font-family: var(--serifa);
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.01em;
+}
+
+.logo-texto em {
+    color: var(--ferrugem);
+
+    font-weight: 500;
+}
+
+.logo-claro {
+    color: var(--papel);
+}
+
+.logo-claro .logo-texto em {
+    color: var(--rosa-claro);
+}

@@ -1,64 +1,67 @@
-DROP DATABASE IF EXISTS MEDIASAVER;
-CREATE DATABASE MEDIASAVER;
+-- MediaSaver: estrutura do banco (MySQL 8)
+--
+-- A API roda este script sozinha ao iniciar. Ele só cria o que ainda não
+-- existe, então pode rodar quantas vezes quiser sem perder dados.
+-- Para apagar tudo e começar do zero: rode Resetar.sql e reinicie a API.
+
+CREATE DATABASE IF NOT EXISTS MEDIASAVER CHARACTER SET utf8mb4;
 USE MEDIASAVER;
-create table Usuar(
-    id int unsigned primary key auto_increment,
-    nome varchar(255) not null,
-    email varchar(255) not null unique,
-    senha varchar(255) not null,
-    adm boolean not null default FALSE,
-    dataConta datetime not null default current_timestamp,
-    karma smallint default 0,
-    qtdPost smallint unsigned default 0,
-    qtdInt smallint unsigned default 0,
-    fotoPath varchar(255) -- por ser uma foto por conta não tem que ter um ID(sem tabela extra, eba), e como a maioria das pessoas coloca foto esse campo rararente vai ficar sem utilizar
+
+CREATE TABLE IF NOT EXISTS Usuar (
+    id int unsigned PRIMARY KEY AUTO_INCREMENT,
+    nome varchar(100) NOT NULL,
+    email varchar(255) NOT NULL UNIQUE,
+    senha varchar(255) NOT NULL, -- hash da senha (PBKDF2), nunca a senha pura
+    adm boolean NOT NULL DEFAULT FALSE,
+    dataConta datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    karma int NOT NULL DEFAULT 0, -- soma do karma dos posts do usuário
+    qtdPost smallint unsigned NOT NULL DEFAULT 0,
+    qtdInt int unsigned NOT NULL DEFAULT 0,
+    fotoPath varchar(255) -- uma foto por conta, então não precisa de tabela extra
 );
 
-create table Post(
-    id int unsigned not null auto_increment,
+CREATE TABLE IF NOT EXISTS Post (
+    id int unsigned PRIMARY KEY AUTO_INCREMENT,
     idUsuar int unsigned,
-    titulo varchar(100) not null, -- 255 ficaria horrível de feio
-    descricao varchar(255),
+    titulo varchar(100) NOT NULL,
+    descricao varchar(1000),
     marca varchar(50),
-    anoLancamento smallint unsigned not null, 
-    karma smallint default 0,
-    qtdimagem tinyint unsigned default 0, -- a ideia é ter um limite de imagens 
-    qtdcomments tinyint unsigned default 0, -- 255 comentários máximos
-    dataPost datetime not null default current_timestamp,
-    primary key(id),
-    foreign key (idUsuar) references Usuar(id)
+    anoLancamento smallint unsigned, -- opcional: nem todo objeto tem ano conhecido
+    categoria varchar(20) NOT NULL DEFAULT 'outro', -- camera, vinil, video, radio, audio, game, outro
+    karma int NOT NULL DEFAULT 0, -- upvotes menos downvotes
+    qtdimagem tinyint unsigned NOT NULL DEFAULT 0, -- limite de 5 imagens por post
+    qtdcomments smallint unsigned NOT NULL DEFAULT 0,
+    dataPost datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idUsuar) REFERENCES Usuar(id) ON DELETE SET NULL
 );
 
-create table comentario(
-    id tinyint unsigned not null, -- máximo de 255 por post, valor retirado da tabela posts 
-    conteudo varchar(255) not null,
-    idUsuar int unsigned not null,
-    idPost int unsigned not null,
-    primary key(idUsuar, idPost, id),
-    index idx_comentario_id (id),
-    dataComent datetime not null default current_timestamp,
-    foreign key (idPost) references Post(id),
-    foreign key (idUsuar) references Usuar(id)
+CREATE TABLE IF NOT EXISTS comentario (
+    id int unsigned PRIMARY KEY AUTO_INCREMENT, -- id próprio: a interação aponta para um comentário só
+    conteudo varchar(500) NOT NULL,
+    idUsuar int unsigned NOT NULL,
+    idPost int unsigned NOT NULL,
+    dataComent datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idPost) REFERENCES Post(id) ON DELETE CASCADE,
+    FOREIGN KEY (idUsuar) REFERENCES Usuar(id) ON DELETE CASCADE
 );
 
-create table interacoes(
-    idUsuar int unsigned not null,
-    id smallint unsigned not null, --pegar da tabela usuar
-    idComentario tinyint unsigned,
-    idPost int unsigned, 
-    descricao varchar(10) not null, -- like, comentario, dislike, post, 
-    dataHora datetime not null default current_timestamp,
-    primary key(idUsuar, id),
-    foreign key (idUsuar) references Usuar(id),
-    foreign key (idComentario) references comentario(id),
-    foreign key (idPost) references Post(id)
+CREATE TABLE IF NOT EXISTS interacoes (
+    id int unsigned PRIMARY KEY AUTO_INCREMENT,
+    idUsuar int unsigned NOT NULL,
+    idPost int unsigned,
+    idComentario int unsigned,
+    descricao varchar(10) NOT NULL, -- upvote, downvote, comentario, post
+    dataHora datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_interacoes_voto (idPost, idUsuar, descricao),
+    FOREIGN KEY (idUsuar) REFERENCES Usuar(id) ON DELETE CASCADE,
+    FOREIGN KEY (idPost) REFERENCES Post(id) ON DELETE CASCADE,
+    FOREIGN KEY (idComentario) REFERENCES comentario(id) ON DELETE CASCADE
 );
 
-create table ImagemPost (
-    id tinyint unsigned not null,-- vai pegar o id da tebela posts, assim como o comentario
-    idPost int unsigned not null,
-    caminho varchar(255) not null,
-    
-    primary key(idPost, id),
-    foreign key (idPost) references Post(id) on delete cascade
+CREATE TABLE IF NOT EXISTS ImagemPost (
+    idPost int unsigned NOT NULL,
+    id tinyint unsigned NOT NULL, -- numeração dentro do post (1, 2, 3...)
+    caminho varchar(255) NOT NULL,
+    PRIMARY KEY (idPost, id),
+    FOREIGN KEY (idPost) REFERENCES Post(id) ON DELETE CASCADE
 );

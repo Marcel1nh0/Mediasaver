@@ -1,69 +1,363 @@
-.home {
-    width: 100%;
-    min-height: 100vh;
+/* ---------- Abertura ---------- */
+.inicio {
+    border-bottom: 1px solid var(--borda);
+}
+
+.inicio-grade {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 520px;
+    align-items: center;
+    gap: 64px;
+
+    padding-top: 64px;
+    padding-bottom: 48px;
+}
+
+.inicio-texto h1 {
+    margin: 22px 0 22px;
+
+    font-family: var(--serifa);
+    font-size: clamp(48px, 6vw, 78px);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+}
+
+.inicio-texto h1 em {
+    display: block;
+
+    color: var(--ferrugem);
+
+    font-style: italic;
+}
+
+.inicio-descricao {
+    max-width: 470px;
+
+    margin: 0 0 34px;
+
+    color: var(--tinta-suave);
+
+    font-size: 17px;
+    line-height: 1.65;
+}
+
+/* Caixa de busca com sombra rosa */
+.busca {
+    max-width: 610px;
+
+    border: 1px solid var(--tinta);
+
+    background: var(--papel);
+    box-shadow: 6px 6px 0 var(--sombra-rosa);
+}
+
+.busca label {
+    display: block;
+
+    padding: 6px 0 0;
+
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.busca-linha {
+    display: flex;
+}
+
+.busca-linha input {
+    flex: 1;
+    min-width: 0;
+
+    padding: 12px 16px 14px;
+
+    border: 0;
+    outline: none;
+
+    background: transparent;
+
+    font-size: 16px;
+}
+
+.busca:focus-within {
+    outline: 2px solid var(--ferrugem);
+    outline-offset: 2px;
+}
+
+.busca-botao {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    margin: -1px -1px -1px 0;
+    padding: 0 20px;
+
+    border: 0;
+
+    color: white;
+    background: var(--ferrugem);
+
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.busca-botao:hover {
+    background: var(--ferrugem-escura);
+}
+
+.busca-nota {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin: 14px 0 0;
+
+    color: var(--cinza-mono);
+
+    font-family: var(--mono);
+    font-size: 11px;
+}
+
+.inicio-contador {
+    margin: 30px 0 0;
+
+    color: var(--cinza-mono);
+
+    font-family: var(--mono);
+    font-size: 12px;
+}
+
+.inicio-contador strong {
+    color: var(--tinta);
+    font-size: 14px;
+}
+
+/* Ficha em destaque */
+.destaque {
+    display: block;
+
+    color: var(--tinta);
+    text-decoration: none;
+}
+
+.destaque-topo {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 14px 16px;
+
+    border-top: 1px dashed var(--tracejado);
+
+    color: var(--cinza-mono);
+
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.destaque-numero {
+    color: var(--ferrugem);
+    font-weight: 600;
+}
+
+.destaque-imagem {
+    height: 380px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 12px;
 
     overflow: hidden;
 
-    background-color: #f4eee2;
+    background: var(--imagem-fundo);
 }
 
-.home-conteudo {
-    min-height: calc(100vh - 176px);
+.destaque-imagem img {
+    width: 100%;
+    height: 100%;
 
-    padding: 34px 48px 42px;
-
-    background-color: #f4eee2;
+    object-fit: cover;
 }
 
-.posts {
-    display: grid;
+.destaque-imagem .sem-foto {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
 
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+.destaque-corpo {
+    margin-top: 8px;
+    padding: 20px 20px 18px;
 
-    gap: 16px;
+    border-top: 1px solid var(--borda);
+}
 
-    margin-top: 42px;
+.destaque-meta {
+    margin: 0 0 10px;
+
+    color: var(--cinza-mono);
+
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.destaque-corpo h2 {
+    margin: 0;
+
+    font-family: var(--serifa);
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.05;
+}
+
+.destaque-rodape {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-top: 18px;
+    padding-top: 14px;
+
+    border-top: 1px dashed var(--tracejado);
+
+    color: var(--tinta-suave);
+
+    font-family: var(--mono);
+    font-size: 12px;
+}
+
+.destaque-ver {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    color: var(--ferrugem);
+    font-weight: 600;
+}
+
+.destaque:hover .destaque-ver {
+    text-decoration: underline;
+}
+
+/* ---------- Seções (acervo e eBay) ---------- */
+.secao {
+    padding-top: 56px;
+
+    scroll-margin-top: 90px;
+}
+
+.secao-conteudo {
+    margin-top: 28px;
+}
+
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    margin-top: 24px;
+}
+
+.filtros button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    min-height: 40px;
+    padding: 6px 16px;
+
+    border: 1px solid var(--tracejado);
+    border-radius: 999px;
+
+    background: transparent;
+
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.filtros button span {
+    color: var(--cinza-mono);
+
+    font-family: var(--mono);
+    font-size: 10px;
+}
+
+.filtros button:hover {
+    border-color: var(--tinta);
+}
+
+.filtros button.ativo {
+    border-color: var(--tinta);
+
+    color: var(--papel);
+    background: var(--tinta);
+}
+
+.filtros button.ativo span {
+    color: var(--papel);
 }
 
 .sem-resultados {
     grid-column: 1 / -1;
 
-    padding: 30px;
+    margin: 0;
+    padding: 36px;
 
-    color: #806a58;
+    border: 1px dashed var(--tracejado);
+
+    color: var(--tinta-suave);
     text-align: center;
 }
 
-/* Tablet */
-@media (max-width: 800px) {
-    .posts {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+.sem-resultados a {
+    color: var(--ferrugem);
+}
+
+.home-erro {
+    color: var(--ferrugem-escura);
+}
+
+@media (max-width: 1080px) {
+    .inicio-grade {
+        grid-template-columns: minmax(0, 1fr) 420px;
+        gap: 40px;
     }
 
-    .home-conteudo {
-        min-height: auto;
-        padding: 30px 30px 40px;
+    .destaque-imagem {
+        height: 300px;
     }
 }
 
-/* Celular */
-@media (max-width: 480px) {
-    .home-conteudo {
-        padding: 24px 16px 30px;
-    }
-
-    .posts {
-        gap: 12px;
-        margin-top: 28px;
-    }
-
-    .post-imagem {
-        height: 100px;
-    }
-}
-
-@media (max-width: 350px) {
-    .posts {
+@media (max-width: 860px) {
+    .inicio-grade {
         grid-template-columns: 1fr;
+
+        padding-top: 40px;
+    }
+}
+
+@media (max-width: 520px) {
+    .busca-linha {
+        flex-direction: column;
+    }
+
+    .busca-botao {
+        justify-content: center;
+
+        min-height: 46px;
+        margin: 0 -1px -1px;
+    }
+
+    .destaque-imagem {
+        height: 240px;
     }
 }

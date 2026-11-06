@@ -1,28 +1,26 @@
-import { HeartHandshake, Copy } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Copy, Check, Heart } from "lucide-react";
 
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
 import "./Doacao.css";
 
+const CHAVE = "contato@mediasaver.com";
+
 function Doacao() {
 
-    const [copiado, setCopiado] =
-        useState(false);
+    const [copiado, setCopiado] = useState(false);
 
-    const chave =
-        "contato@mediasaver.com";
-
-    function copiar() {
-
-        navigator.clipboard.writeText(chave);
-
-        setCopiado(true);
-
-        setTimeout(() => {
-            setCopiado(false);
-        }, 2000);
+    async function copiar() {
+        try {
+            await navigator.clipboard.writeText(CHAVE);
+            setCopiado(true);
+            setTimeout(() => setCopiado(false), 2000);
+        } catch {
+            // Sem permissão para a área de transferência: a chave continua visível para copiar à mão.
+        }
     }
 
     return (
@@ -30,43 +28,43 @@ function Doacao() {
 
             <Header />
 
-            <main className="doacao-conteudo">
+            <main className="container">
 
-                <div className="doacao-caixa">
+                <nav className="trilha" aria-label="Você está em">
+                    <Link to="/">Início</Link>
+                    <span aria-hidden="true">/</span>
+                    <span>Fazer doação</span>
+                </nav>
 
-                    <HeartHandshake
-                        size={48}
-                        strokeWidth={1.5}
-                    />
+                <div className="doacao-grade">
 
-                    <h2>
-                        Apoie o MediaSaver
-                    </h2>
+                    <div>
+                        <p className="etiqueta">Apoie o acervo</p>
+                        <h1>
+                            Ajude a memória
+                            <em>a continuar existindo.</em>
+                        </h1>
+                        <p className="doacao-texto">
+                            O MediaSaver é mantido por quem guarda. As doações ajudam a manter o site no ar e a apoiar
+                            acervos e museus que preservam mídias físicas.
+                        </p>
+                    </div>
 
-                    <p>
-                        Ajude a manter o projeto
-                        <br />
-                        e preservar essas memórias.
-                    </p>
+                    <div className="doacao-caixa papel rosa">
+                        <div className="doacao-caixa-topo">
+                            <span>Doação via PIX</span>
+                            <Heart size={14} />
+                        </div>
 
-                    <div className="pix">
+                        <p className="doacao-rotulo">Chave PIX (e-mail)</p>
+                        <p className="doacao-chave">{CHAVE}</p>
 
-                        <span>
-                            Chave para doação
-                        </span>
-
-                        <strong>
-                            {chave}
-                        </strong>
-
-                        <button onClick={copiar}>
-                            <Copy size={14} />
-
-                            {copiado
-                                ? "Copiado!"
-                                : "Copiar chave"}
+                        <button type="button" className="botao vermelho" onClick={copiar}>
+                            {copiado ? <Check size={16} /> : <Copy size={16} />}
+                            {copiado ? "Chave copiada!" : "Copiar chave"}
                         </button>
 
+                        <p className="doacao-nota">Qualquer valor ajuda. Obrigado por guardar com a gente.</p>
                     </div>
 
                 </div>

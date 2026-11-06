@@ -1,0 +1,39 @@
+.aviso {
+    padding-top: 64px;
+}
+
+.aviso-caixa {
+    max-width: 560px;
+
+    display: flex;
+    gap: 14px;
+
+    margin: 0 auto;
+    padding: 24px 28px;
+}
+
+.aviso.erro svg {
+    flex-shrink: 0;
+
+    color: var(--ferrugem);
+}
+
+.aviso-caixa strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-family: var(--serifa);
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.aviso-caixa a {
+    color: var(--ferrugem);
+}
+
+.pp-aviso {
+    margin: 0;
+
+    color: var(--tinta-suave);
+}

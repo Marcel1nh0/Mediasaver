@@ -1,14 +1,41 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+/* =========================================================
+   MediaSaver: "arquivo coletivo"
+   Papel creme, tinta preta, carimbo ferrugem e fichas de catálogo.
+   ========================================================= */
 
 :root {
-  font-family: "DM Sans", Arial, sans-serif;
+  --fundo: #e9e8e2;
+  --papel: #f6f5f0;
+  --borda: #cfccc3;
+  --tracejado: #bdb9ae;
+  --tinta: #1b1b1c;
+  --tinta-suave: #47474a;
+  --cinza-mono: #5f666c;
+  --ferrugem: #a8392a;
+  --ferrugem-escura: #8d2d20;
+  --sombra-rosa: #ebd3ca;
+  --sombra-cinza: #d8d6cf;
+  --escuro: #1c1d1f;
+  --rosa-claro: #e8a28f;
+  --imagem-fundo: #d9d7d0;
 
-  color: #33271f;
-  background: #1f1f1f;
+  --serifa: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: "Archivo", "Segoe UI", Arial, sans-serif;
+  --mono: "IBM Plex Mono", Consolas, "Courier New", monospace;
+
+  --largura: 1200px;
+
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+
+  color: var(--tinta);
+  background: var(--fundo);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-
   -webkit-font-smoothing: antialiased;
 }
 
@@ -26,13 +53,15 @@ body,
 }
 
 body {
-  background: #1f1f1f;
+  background: var(--fundo);
 }
 
 button,
 input,
-textarea {
+textarea,
+select {
   font: inherit;
+  color: inherit;
 }
 
 button {
@@ -43,18 +72,346 @@ a {
   color: inherit;
 }
 
-.app {
-  width: 100%;
-  min-height: 100vh;
-  margin: 0;
+img {
+  display: block;
 }
 
-.page {
-  width: 100%;
+.app {
+  min-height: 100vh;
+}
+
+/* Toda página: cabeçalho, conteúdo e rodapé em coluna */
+.page,
+.home {
   min-height: 100vh;
 
   display: flex;
   flex-direction: column;
+}
 
-  background: #f4eee2;
+.page > main,
+.home > main {
+  flex: 1;
+}
+
+.container {
+  width: 100%;
+  max-width: calc(var(--largura) + 48px);
+
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+/* ---------- Textos de apoio ---------- */
+
+/* Rótulo pequeno com quadradinho vermelho: "■ ACERVO" */
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  margin: 0;
+
+  color: var(--cinza-mono);
+
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.etiqueta::before {
+  content: "";
+
+  width: 7px;
+  height: 7px;
+
+  background: var(--ferrugem);
+}
+
+.etiqueta.vermelha {
+  color: var(--ferrugem);
+  font-weight: 600;
+}
+
+.mono {
+  font-family: var(--mono);
+}
+
+/* Trilha: Início / Câmera / ... */
+.trilha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin: 0;
+  padding: 26px 0 0;
+
+  color: var(--cinza-mono);
+
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.trilha a {
+  text-decoration: none;
+}
+
+.trilha a:hover {
+  color: var(--ferrugem);
+}
+
+.trilha span[aria-hidden] {
+  color: var(--tracejado);
+}
+
+/* Título de seção: etiqueta + título grande + linha */
+.secao-titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px 24px;
+
+  padding-bottom: 12px;
+
+  border-bottom: 1px solid var(--tinta);
+}
+
+.secao-titulo h2 {
+  margin: 6px 0 0;
+
+  font-family: var(--serifa);
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.secao-titulo .secao-resumo {
+  margin: 0 0 4px;
+
+  color: var(--cinza-mono);
+
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+/* Papel com sombra de "pilha de fichas" */
+.papel {
+  border: 1px solid var(--borda);
+
+  background: var(--papel);
+  box-shadow: 8px 8px 0 var(--sombra-cinza);
+}
+
+.papel.rosa {
+  box-shadow: 8px 8px 0 var(--sombra-rosa);
+}
+
+/* ---------- Botões ---------- */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 44px;
+  padding: 10px 20px;
+
+  border: 1px solid var(--tinta);
+  border-radius: 0;
+
+  color: var(--papel);
+  background: var(--tinta);
+
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.botao:hover:not(:disabled) {
+  background: #000000;
+}
+
+.botao.vermelho {
+  border-color: var(--ferrugem);
+  background: var(--ferrugem);
+}
+
+.botao.vermelho:hover:not(:disabled) {
+  border-color: var(--ferrugem-escura);
+  background: var(--ferrugem-escura);
+}
+
+.botao.contorno {
+  border-color: var(--tracejado);
+
+  color: var(--tinta);
+  background: var(--papel);
+}
+
+.botao.contorno:hover:not(:disabled) {
+  border-color: var(--tinta);
+  background: white;
+}
+
+.botao.texto {
+  border-color: transparent;
+
+  color: var(--tinta);
+  background: transparent;
+}
+
+.botao.texto:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.botao.perigo {
+  border-color: transparent;
+
+  color: var(--ferrugem-escura);
+  background: transparent;
+}
+
+.botao.perigo:hover:not(:disabled) {
+  background: rgba(168, 57, 42, 0.08);
+}
+
+.botao:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* ---------- Campos ---------- */
+.campo-rotulo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 6px;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.campo-rotulo .obrigatorio {
+  color: var(--ferrugem);
+}
+
+.campo-rotulo .opcional,
+.campo-rotulo .contador {
+  color: var(--cinza-mono);
+
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.campo-ajuda {
+  margin: 6px 0 0;
+
+  color: var(--tinta-suave);
+  font-size: 12px;
+}
+
+.entrada {
+  width: 100%;
+  min-height: 48px;
+
+  padding: 10px 14px;
+
+  border: 1px solid var(--tracejado);
+  border-radius: 0;
+
+  color: var(--tinta);
+  background: var(--papel);
+
+  font-size: 16px;
+}
+
+.entrada::placeholder {
+  color: #7d7f80;
+}
+
+textarea.entrada {
+  min-height: 140px;
+
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.entrada:focus {
+  border-color: var(--tinta);
+  outline: none;
+}
+
+/* Foco visível para quem usa teclado */
+a:focus-visible,
+button:focus-visible,
+.entrada:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--ferrugem);
+  outline-offset: 2px;
+}
+
+/* Caixa de erro */
+.alerta {
+  display: flex;
+  gap: 12px;
+
+  padding: 14px 16px;
+
+  border: 1px solid #dcb0a6;
+
+  background: #f2d8d2;
+}
+
+.alerta svg {
+  flex-shrink: 0;
+
+  margin-top: 2px;
+
+  color: var(--ferrugem-escura);
+}
+
+.alerta strong {
+  display: block;
+
+  font-size: 14px;
+}
+
+.alerta span {
+  display: block;
+
+  color: var(--tinta-suave);
+  font-size: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .secao-titulo h2 {
+    font-size: 32px;
+  }
 }

@@ -1,224 +1,483 @@
-.post-page {
-    flex: 1;
-
-    padding: 14px 24px 10px;
-
-    background: #f4eee2;
-}
-
-.post-detalhes {
+.pp-grade {
     display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 64px;
 
-    grid-template-columns: 230px 1fr;
-
-    gap: 18px;
-
-    max-width: 1080px;
-
-    margin: 0 auto;
+    margin-top: 34px;
 }
 
-.imagem-principal {
-    height: 107px;
+/* ---------- Galeria ---------- */
+.pp-galeria {
+    padding: 12px 12px 18px;
+}
+
+.pp-foto-principal {
+    height: 440px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border-radius: 8px;
+    overflow: hidden;
 
-    color: white;
-
-    background: linear-gradient(
-            110deg,
-            #80522f,
-            #dd9560
-    );
+    background: var(--imagem-fundo);
 }
 
-.miniaturas {
-    display: flex;
-    gap: 6px;
+.pp-foto-principal img {
+    width: 100%;
+    height: 100%;
 
-    margin-top: 6px;
+    object-fit: cover;
 }
 
-.miniaturas div,
-.miniaturas button {
-    width: 53px;
-    height: 36px;
-
-    border-radius: 7px;
+.pp-foto-principal .sem-foto {
+    width: 100%;
+    height: 100%;
+    margin: 0;
 }
 
-.miniaturas div {
-    background: linear-gradient(
-            110deg,
-            #80522f,
-            #d9905c
-    );
+.pp-miniaturas {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: start;
+    gap: 8px;
+
+    margin-top: 8px;
 }
 
-.miniaturas button {
-    border: 1px dashed #d0ad89;
-
-    color: #a17c5e;
-
-    background: transparent;
-}
-
-.post-texto {
+.pp-miniaturas button {
     position: relative;
+
+    aspect-ratio: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px;
+
+    border: 1px solid var(--borda);
+
+    background: var(--imagem-fundo);
 }
 
-.post-titulo {
+.pp-miniaturas button.ativa {
+    border: 2px solid var(--ferrugem);
+}
+
+.pp-miniaturas img {
+    max-width: 100%;
+    max-height: 100%;
+
+    object-fit: contain;
+}
+
+.pp-miniatura-numero {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+
+    padding: 0 3px;
+
+    color: var(--tinta-suave);
+    background: var(--papel);
+
+    font-family: var(--mono);
+    font-size: 9px;
+}
+
+.pp-galeria-nota {
+    margin: 24px 0 0;
+
+    color: var(--cinza-mono);
+
+    font-family: var(--mono);
+    font-size: 11px;
+}
+
+/* ---------- Ficha ---------- */
+.pp-info {
+    border-top: 3px solid var(--tinta);
+}
+
+.pp-cabecalho {
     display: flex;
     justify-content: space-between;
+    gap: 12px;
 
-    gap: 10px;
+    padding-top: 18px;
+
+    color: var(--cinza-mono);
+
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
 }
 
-.post-titulo h2 {
-    margin: 0 0 4px;
-
-    font-family: Georgia, serif;
-    font-size: 16px;
+.pp-categoria {
+    color: var(--ferrugem);
 }
 
-.post-titulo p {
+.pp-titulo {
+    margin: 18px 0 22px;
+
+    font-family: var(--serifa);
+    font-size: clamp(36px, 4.2vw, 54px);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+}
+
+.pp-dados {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+
+    margin: 0;
+    padding: 18px 0;
+
+    border-top: 1px solid var(--borda);
+    border-bottom: 1px solid var(--borda);
+}
+
+.pp-dados dt {
+    margin-bottom: 4px;
+
+    color: var(--tinta-suave);
+
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.pp-dados dd {
     margin: 0;
 
-    color: #856d5a;
-
-    font-size: 8px;
+    font-size: 15px;
+    font-weight: 600;
 }
 
-.editar {
-    height: 25px;
-
-    padding: 5px 13px;
-
-    border: 1px solid #c65d43;
-    border-radius: 5px;
-
-    color: #b94b35;
-
-    font-size: 9px;
-
-    text-decoration: none;
+.pp-autor {
+    text-decoration: underline;
+    text-decoration-color: var(--ferrugem);
+    text-underline-offset: 3px;
 }
 
-.descricao {
-    margin: 14px 0 8px;
+.pp-dados small {
+    display: block;
 
-    font-size: 9px;
+    margin-top: 2px;
+
+    color: var(--cinza-mono);
+
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 400;
 }
 
-.autor {
-    margin: 0;
+.pp-descricao {
+    margin: 26px 0 0;
 
-    color: #765d4c;
+    color: var(--tinta-suave);
 
-    font-size: 8px;
+    font-size: 17px;
+    line-height: 1.75;
+    white-space: pre-line;
 }
 
-.voto {
-    position: absolute;
-    right: 0;
-    bottom: 28px;
+/* Painel de karma e ações */
+.pp-painel {
+    margin-top: 34px;
+    padding: 20px;
 
-    padding: 5px 9px;
+    border: 1px solid var(--borda);
 
-    border-radius: 10px;
-
-    color: #654c39;
-
-    background: #eadbc6;
-
-    font-size: 9px;
+    background: var(--papel);
 }
 
-.ver-eBay {
-    margin-top: 10px;
-
-    padding: 6px 10px;
-
-    border: 1px solid #b94b35;
-    border-radius: 4px;
-
-    color: #b94b35;
-    background: transparent;
-
-    font-size: 9px;
-}
-
-.comentarios {
-    max-width: 1080px;
-
-    margin: 8px auto 0;
-}
-
-.comentarios h3 {
-    margin: 0 0 5px;
-
-    font-family: Georgia, serif;
-    font-size: 9px;
-}
-
-.comentario {
-    margin-bottom: 5px;
-
-    padding: 5px 8px;
-
-    border: 1px solid #e8d9c9;
-    border-radius: 5px;
-
-    background: white;
-
-    font-size: 9px;
-}
-
-.novo-comentario {
+.pp-karma {
     display: flex;
-    gap: 6px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    padding-bottom: 16px;
+
+    border-bottom: 1px dashed var(--tracejado);
 }
 
-.novo-comentario input {
-    flex: 1;
+.pp-karma-rotulo {
+    color: var(--tinta-suave);
 
-    min-width: 0;
-
-    padding: 5px 8px;
-
-    border: 1px solid #d9b39b;
-    border-radius: 5px;
-
-    outline: none;
-
-    font-size: 9px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
 }
 
-.novo-comentario button {
-    width: 55px;
+.pp-voto {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
 
-    border: 0;
-    border-radius: 5px;
+.pp-voto button {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--tracejado);
+
+    background: var(--papel);
+}
+
+.pp-voto button:hover {
+    border-color: var(--tinta);
+}
+
+.pp-voto button.votado {
+    border-color: var(--ferrugem);
 
     color: white;
-    background: #b94b35;
-
-    font-size: 9px;
+    background: var(--ferrugem);
 }
 
-@media (max-width: 650px) {
+.pp-voto strong {
+    min-width: 28px;
 
-    .post-detalhes {
+    font-family: var(--serifa);
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+}
+
+.pp-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    margin-top: 16px;
+}
+
+.pp-excluir {
+    margin-top: 8px;
+}
+
+.pp-nota {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin: 12px 0 0;
+
+    color: var(--cinza-mono);
+
+    font-family: var(--mono);
+    font-size: 11px;
+}
+
+.pp-erro {
+    margin: 14px 0 0;
+
+    font-size: 14px;
+}
+
+/* ---------- Comentários ---------- */
+.pp-comentarios {
+    margin-top: 72px;
+    padding-top: 22px;
+
+    border-top: 1px solid var(--tinta);
+}
+
+.pp-comentarios-topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px 24px;
+
+    margin-bottom: 18px;
+}
+
+.pp-comentarios-topo h2 {
+    margin: 0;
+
+    font-family: var(--serifa);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.pp-comentarios-topo h2 span {
+    margin-left: 6px;
+
+    color: var(--ferrugem);
+
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.pp-comentarios-topo p {
+    margin: 0;
+
+    color: var(--tinta-suave);
+    font-size: 14px;
+}
+
+.pp-vazio {
+    margin: 0;
+    padding: 18px 0;
+
+    border-bottom: 1px dashed var(--tracejado);
+
+    color: var(--tinta-suave);
+}
+
+.pp-comentario {
+    display: flex;
+    gap: 16px;
+
+    padding: 20px 0;
+
+    border-bottom: 1px dashed var(--tracejado);
+}
+
+.pp-comentario-avatar {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.pp-comentario-corpo {
+    flex: 1;
+    min-width: 0;
+}
+
+.pp-comentario-topo {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+
+    margin-bottom: 4px;
+}
+
+.pp-comentario-topo strong {
+    font-size: 15px;
+}
+
+.pp-comentario-topo span {
+    color: var(--cinza-mono);
+
+    font-family: var(--mono);
+    font-size: 11px;
+}
+
+.pp-comentario-topo button {
+    margin-left: auto;
+    padding: 4px;
+
+    border: 0;
+
+    color: var(--ferrugem-escura);
+    background: none;
+}
+
+.pp-comentario p {
+    margin: 0;
+
+    color: var(--tinta-suave);
+    font-size: 15px;
+    white-space: pre-line;
+}
+
+.pp-novo-comentario {
+    margin-top: 32px;
+    padding: 20px;
+
+    border: 1px solid var(--borda);
+
+    background: var(--papel);
+}
+
+.pp-novo-comentario label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.pp-novo-comentario textarea {
+    min-height: 130px;
+}
+
+.pp-novo-comentario-base {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-top: 12px;
+
+    color: var(--tinta-suave);
+    font-size: 12px;
+}
+
+.pp-entrar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    color: var(--tinta-suave);
+}
+
+@media (max-width: 900px) {
+    .pp-grade {
         grid-template-columns: 1fr;
+        gap: 36px;
     }
 
-    .voto {
-        position: static;
-        display: inline-block;
-        margin-top: 10px;
+    .pp-foto-principal {
+        height: 340px;
+    }
+}
+
+@media (max-width: 520px) {
+    .pp-dados {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .pp-comentarios-topo h2 {
+        font-size: 34px;
     }
 }

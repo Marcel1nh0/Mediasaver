@@ -30,3 +30,5 @@ obj/
 bin/
 obj/
 .vs/
+# Fotos enviadas pelos usuários (ficam só na máquina de quem roda a API)
+backend/MediaSaver.Api/uploads/
