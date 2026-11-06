@@ -1,4 +1,4 @@
-using MediaSaver.Application.Ebay;
+using MediaSaver.Api.Ebay;
 
 namespace MediaSaver.Api.Endpoints;
 
@@ -20,13 +20,11 @@ public static class EbayEndpoints
             if (string.IsNullOrWhiteSpace(busca))
                 return Results.BadRequest(new { erro = "Informe o parâmetro 'busca'." });
 
-            var lim = Math.Clamp(limite ?? 20, 1, 200); // eBay aceita até 200 por página
+            var lim = Math.Clamp(limite ?? 20, 1, 200);
             var off = Math.Max(offset ?? 0, 0);
 
-            var resultado = await ebay.BuscarAnunciosAsync(busca.Trim(), lim, off, categoriaId, ct);
-            return Results.Ok(resultado);
+            return Results.Ok(await ebay.BuscarAnunciosAsync(busca.Trim(), lim, off, categoriaId, ct));
         })
-        .WithName("BuscarAnunciosEbay")
         .WithSummary("Busca anúncios no eBay por palavra-chave");
 
         // GET /api/ebay/anuncios/v1|123456789012|0
@@ -37,7 +35,6 @@ public static class EbayEndpoints
                 ? Results.NotFound(new { erro = "Anúncio não encontrado." })
                 : Results.Ok(anuncio);
         })
-        .WithName("ObterAnuncioEbay")
         .WithSummary("Detalhes de um anúncio do eBay");
 
         return app;

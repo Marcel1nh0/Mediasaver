@@ -2,35 +2,18 @@ using System.Globalization;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using MediaSaver.Application.Comum;
-using MediaSaver.Application.Ebay;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace MediaSaver.Infrastructure.Ebay;
+namespace MediaSaver.Api.Ebay;
 
-/// <summary>
-/// Implementação de IEbayService usando a Browse API do eBay.
-/// Docs: https://developer.ebay.com/develop/api/buy/browse_api
-/// </summary>
-public class EbayBrowseService : IEbayService
+/// <summary>Cliente da Browse API do eBay.</summary>
+public class EbayService(
+    HttpClient http,
+    EbayTokenProvider tokens,
+    IOptions<EbayOptions> opcoes,
+    ILogger<EbayService> logger) : IEbayService
 {
-    private readonly HttpClient _http;
-    private readonly EbayTokenProvider _tokens;
-    private readonly EbayOptions _opcoes;
-    private readonly ILogger<EbayBrowseService> _logger;
-
-    public EbayBrowseService(
-        HttpClient http,
-        EbayTokenProvider tokens,
-        IOptions<EbayOptions> opcoes,
-        ILogger<EbayBrowseService> logger)
-    {
-        _http = http;
-        _tokens = tokens;
-        _opcoes = opcoes.Value;
-        _logger = logger;
-    }
+    private readonly EbayOptions _opcoes = opcoes.Value;
 
     public async Task<ResultadoBuscaEbay> BuscarAnunciosAsync(
         string termo, int limite, int offset, string? categoriaId = null, CancellationToken ct = default)
@@ -44,10 +27,9 @@ public class EbayBrowseService : IEbayService
         using var resposta = await EnviarAsync(url, ct);
         await GarantirSucessoAsync(resposta, ct);
 
-        var dados = await resposta.Content.ReadFromJsonAsync<EbaySearchResponse>(ct)
-                    ?? new EbaySearchResponse();
+        var dados = await resposta.Content.ReadFromJsonAsync<EbaySearchResponse>(ct) ?? new();
 
-        var anuncios = (dados.ItemSummaries ?? new List<EbayItem>())
+        var anuncios = (dados.ItemSummaries ?? [])
             .Select(i => new AnuncioEbay(
                 i.ItemId,
                 i.Title,
@@ -75,14 +57,15 @@ public class EbayBrowseService : IEbayService
 
         var imagens = new List<string>();
         if (i.Image?.ImageUrl is { } principal) imagens.Add(principal);
-        imagens.AddRange((i.AdditionalImages ?? new List<EbayImagem>())
-            .Select(img => img.ImageUrl)
-            .OfType<string>());
+        imagens.AddRange((i.AdditionalImages ?? []).Select(img => img.ImageUrl).OfType<string>());
 
-        var local = i.ItemLocation is null
-            ? null
-            : string.Join(", ", new[] { i.ItemLocation.City, i.ItemLocation.StateOrProvince, i.ItemLocation.Country }
-                .Where(p => !string.IsNullOrWhiteSpace(p)));
+        var local = string.Join(", ", new[]
+            {
+                i.ItemLocation?.City,
+                i.ItemLocation?.StateOrProvince,
+                i.ItemLocation?.Country
+            }
+            .Where(p => !string.IsNullOrWhiteSpace(p)));
 
         return new AnuncioEbayDetalhe(
             i.ItemId,
@@ -99,7 +82,7 @@ public class EbayBrowseService : IEbayService
 
     private async Task<HttpResponseMessage> EnviarAsync(string url, CancellationToken ct)
     {
-        var token = await _tokens.ObterTokenAsync(ct);
+        var token = await tokens.ObterTokenAsync(ct);
 
         using var requisicao = new HttpRequestMessage(HttpMethod.Get, url);
         requisicao.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -107,7 +90,7 @@ public class EbayBrowseService : IEbayService
 
         try
         {
-            return await _http.SendAsync(requisicao, ct);
+            return await http.SendAsync(requisicao, ct);
         }
         catch (HttpRequestException ex)
         {
@@ -124,7 +107,7 @@ public class EbayBrowseService : IEbayService
         if (resposta.IsSuccessStatusCode) return;
 
         var corpo = await resposta.Content.ReadAsStringAsync(ct);
-        _logger.LogError("Erro da Browse API do eBay ({Status}): {Corpo}",
+        logger.LogError("Erro da Browse API do eBay ({Status}): {Corpo}",
             (int)resposta.StatusCode, corpo);
         throw new ServicoExternoException($"O eBay retornou erro {(int)resposta.StatusCode}.");
     }

@@ -1,10 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace MediaSaver.Infrastructure.Ebay;
+namespace MediaSaver.Api.Ebay;
 
-// Modelos que espelham o JSON do eBay. Ficam "internal" porque só a
-// Infrastructure os conhece; o resto do sistema usa os records da Application.
-
+// Modelos que espelham o JSON do eBay; só existem dentro desta pasta.
 internal record EbayTokenResponse(
     [property: JsonPropertyName("access_token")] string AccessToken,
     [property: JsonPropertyName("expires_in")] int ExpiresIn);
@@ -12,8 +10,6 @@ internal record EbayTokenResponse(
 internal class EbaySearchResponse
 {
     public int Total { get; set; }
-    public int Limit { get; set; }
-    public int Offset { get; set; }
     public List<EbayItem>? ItemSummaries { get; set; }
 }
 
@@ -33,7 +29,6 @@ internal class EbayItem
 
 internal class EbayPreco
 {
-    // O eBay envia o valor como string ("12.99")
     public string? Value { get; set; }
     public string? Currency { get; set; }
 }

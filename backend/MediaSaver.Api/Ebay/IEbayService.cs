@@ -1,9 +1,5 @@
-namespace MediaSaver.Application.Ebay;
+namespace MediaSaver.Api.Ebay;
 
-/// <summary>
-/// Contrato para buscar anúncios no eBay. A implementação fica na
-/// camada Infrastructure, então a Application não depende de HTTP.
-/// </summary>
 public interface IEbayService
 {
     Task<ResultadoBuscaEbay> BuscarAnunciosAsync(
