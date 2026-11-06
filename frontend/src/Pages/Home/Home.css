@@ -2,15 +2,17 @@
     width: 100%;
     min-height: 100vh;
 
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
 
     background-color: #f4eee2;
 }
 
 .home-conteudo {
-    min-height: calc(100vh - 176px);
+    flex: 1;
 
-    padding: 34px 48px 42px;
+    padding: 65px 48px 80px;
 
     background-color: #f4eee2;
 }
@@ -20,9 +22,9 @@
 
     grid-template-columns: repeat(4, minmax(0, 1fr));
 
-    gap: 16px;
+    gap: 26px;
 
-    margin-top: 42px;
+    margin: 80px -17px 0;
 }
 
 .sem-resultados {
@@ -42,23 +44,29 @@
 
     .home-conteudo {
         min-height: auto;
-        padding: 30px 30px 40px;
+        padding: 38px 30px 48px;
     }
 }
 
 /* Celular */
 @media (max-width: 480px) {
     .home-conteudo {
-        padding: 24px 16px 30px;
+        padding: 28px 16px 36px;
     }
 
     .posts {
         gap: 12px;
-        margin-top: 28px;
+        margin: 34px 0 0;
     }
 
     .post-imagem {
         height: 100px;
+    }
+}
+
+@media (max-width: 600px) {
+    .home-conteudo .buscador {
+        height: 58px;
     }
 }
 

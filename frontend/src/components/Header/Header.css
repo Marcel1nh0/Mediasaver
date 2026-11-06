@@ -1,5 +1,5 @@
 .header {
-    height: 88px;
+    min-height: 166px;
 
     display: flex;
     align-items: center;
@@ -11,11 +11,14 @@
 .logo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 22px;
+    text-decoration: none;
 }
 
-.logo-icone {
-    font-size: 43px;
+.logo img {
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
 }
 
 .logo h1 {
@@ -24,6 +27,25 @@
     color: #fff8ed;
 
     font-family: Georgia, serif;
-    font-size: 34px;
+    font-size: 60px;
     font-weight: normal;
+}
+
+@media (max-width: 600px) {
+    .header {
+        min-height: 112px;
+    }
+
+    .logo {
+        gap: 12px;
+    }
+
+    .logo img {
+        width: 66px;
+        height: 66px;
+    }
+
+    .logo h1 {
+        font-size: 34px;
+    }
 }

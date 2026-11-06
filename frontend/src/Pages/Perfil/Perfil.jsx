@@ -1,25 +1,17 @@
-import { useState } from "react";
-import { ImagePlus } from "lucide-react";
+import { Award, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import Posts from "../../components/Posts/Posts";
+import { posts } from "../../data/data";
 
 import "./Perfil.css";
 
 function Perfil() {
-
-    const [titulo, setTitulo] =
-        useState("Câmera Kodak anos 60");
-
-    const [descricao, setDescricao] =
-        useState("");
-
-    const [preco, setPreco] =
-        useState("R$ 45,00");
-
-    function salvar() {
-        alert("Alterações salvas!");
-    }
+    const navigate = useNavigate();
+    const karma = 87;
+    const proximoNivel = 100;
 
     return (
         <div className="page">
@@ -27,78 +19,28 @@ function Perfil() {
             <Header />
 
             <main className="perfil-conteudo">
+                <aside className="perfil-usuario">
+                    <div className="perfil-avatar" aria-hidden="true">A</div>
+                    <h2>Ana Souza</h2>
+                    <span className="perfil-selo"><Award size={24} /> Curador</span>
 
-                <h2>Editar post</h2>
-
-                <div className="perfil-form">
-
-                    <button className="perfil-foto">
-                        <ImagePlus size={20} />
-
-                        <span>
-                            Adicionar foto
-                        </span>
-                    </button>
-
-                    <div>
-
-                        <div className="campo">
-
-                            <label>
-                                Título do item
-                            </label>
-
-                            <input
-                                value={titulo}
-                                onChange={(e) =>
-                                    setTitulo(e.target.value)
-                                }
-                            />
-
-                        </div>
-
-                        <div className="campo">
-
-                            <label>
-                                Descrição
-                            </label>
-
-                            <textarea
-                                placeholder="Conte a história do objeto"
-                                value={descricao}
-                                onChange={(e) =>
-                                    setDescricao(e.target.value)
-                                }
-                            />
-
-                        </div>
-
-                        <div className="campo">
-
-                            <label>
-                                Preço ou status
-                            </label>
-
-                            <input
-                                value={preco}
-                                onChange={(e) =>
-                                    setPreco(e.target.value)
-                                }
-                            />
-
-                        </div>
-
-                        <div className="perfil-botao">
-
-                            <button onClick={salvar}>
-                                Salvar alterações
-                            </button>
-
-                        </div>
-
+                    <div className="perfil-karma">
+                        <div className="perfil-karma-rotulo"><span>Karma</span><strong>{karma}</strong></div>
+                        <progress value={karma} max={proximoNivel} aria-label={`${karma} de ${proximoNivel} pontos de karma`} />
+                        <p>Faltam {proximoNivel - karma} para Guardião do acervo</p>
                     </div>
 
-                </div>
+                    <button className="perfil-sair" type="button" onClick={() => navigate("/login")}>
+                        <LogOut size={20} /> Sair
+                    </button>
+                </aside>
+
+                <section className="perfil-publicacoes">
+                    <h2>Meus posts</h2>
+                    <div className="perfil-posts">
+                        {posts.slice(0, 3).map((post) => <Posts key={post.id} post={post} />)}
+                    </div>
+                </section>
 
             </main>
 

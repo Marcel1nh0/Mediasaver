@@ -6,10 +6,12 @@ import {
 import {
     Link
 } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import "./Footer.css";
 
 function Footer() {
+    const location = useLocation();
 
     return (
         <footer className="footer">
@@ -20,19 +22,21 @@ function Footer() {
 
             <div className="footer-botoes">
 
-                <Link
-                    to="/cadastro"
-                    className="footer-botao"
-                >
-                    <Plus size={15} />
-                    Criar post
-                </Link>
+                {location.pathname === "/" && (
+                    <Link
+                        to="/cadastro"
+                        className="footer-botao"
+                    >
+                        <Plus size={22} />
+                        Criar post
+                    </Link>
+                )}
 
                 <Link
                     to="/doacao"
                     className="footer-botao"
                 >
-                    <HeartHandshake size={15} />
+                    <HeartHandshake size={22} />
                     Fazer doação
                 </Link>
 

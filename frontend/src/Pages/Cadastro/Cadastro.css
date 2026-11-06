@@ -1,32 +1,32 @@
 .cadastro-conteudo {
     flex: 1;
 
-    padding: 22px 24px 32px;
+    padding: 54px 24px 44px;
 
     background: #f4eee2;
 }
 
 .cadastro-conteudo h2 {
-    margin: 0 0 20px;
+    margin: 0 0 52px;
 
     text-align: center;
 
     font-family: Georgia, serif;
-    font-size: 17px;
+    font-size: 38px;
     font-weight: normal;
 
     color: #4d382b;
 }
 
 .cadastro-form {
-    width: min(100%, 1080px);
+    width: min(100%, 1392px);
 
     margin: 0 auto;
 
     display: grid;
-    grid-template-columns: 180px 1fr;
+    grid-template-columns: minmax(0, 474px) minmax(0, 1fr);
 
-    gap: 20px;
+    gap: 32px;
 }
 
 .fotos {
@@ -36,10 +36,10 @@
 .fotos > label {
     display: block;
 
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 
     font-family: Georgia, serif;
-    font-size: 10px;
+    font-size: 18px;
 }
 
 .contador-fotos {
@@ -47,21 +47,24 @@
     right: 0;
     top: 0;
 
-    font-size: 8px;
+    font-size: 16px;
     color: #806a58;
 }
 
 .fotos-lista {
     display: flex;
-    gap: 6px;
+    gap: 14px;
+    flex-wrap: wrap;
 }
 
 .adicionar-foto,
 .foto-preview {
-    width: 58px;
-    height: 54px;
+    position: relative;
+    flex: 0 0 148px;
+    width: 148px;
+    height: 140px;
 
-    border-radius: 8px;
+    border-radius: 20px;
 }
 
 .adicionar-foto {
@@ -71,7 +74,7 @@
 
     color: #9b7659;
 
-    border: 1px dashed #cda77f;
+    border: 2px dashed #ca8150;
 
     background: transparent;
 }
@@ -84,29 +87,55 @@
     );
 }
 
+.foto-preview img {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+}
+
+.input-fotos {
+    display: none;
+}
+
+.remover-foto {
+    position: absolute;
+    top: -9px;
+    right: -7px;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: white;
+    background: #171411;
+}
+
 .formulario {
     width: 100%;
 }
 
 .campo {
-    margin-bottom: 10px;
+    margin-bottom: 26px;
 }
 
 .campo-label {
     display: flex;
     justify-content: space-between;
 
-    margin-bottom: 3px;
+    margin-bottom: 12px;
 }
 
 .campo-label label {
     font-family: Georgia, serif;
-    font-size: 9px;
+    font-size: 19px;
     color: #5c4536;
 }
 
 .campo-label span {
-    font-size: 7px;
+    font-size: 16px;
     color: #8a6c56;
 }
 
@@ -115,20 +144,22 @@
     width: 100%;
 
     border: 1px solid #eadfd0;
-    border-radius: 5px;
+    border-radius: 11px;
 
     background: white;
 
-    padding: 7px;
+    height: 48px;
+    padding: 0 14px;
 
     outline: none;
 
-    font-size: 9px;
+    font-size: 19px;
 }
 
 .campo textarea {
-    height: 42px;
-    resize: none;
+    height: 108px;
+    padding-top: 12px;
+    resize: vertical;
 }
 
 .campo input:focus,
@@ -140,25 +171,26 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
 
-    gap: 12px;
+    gap: 34px;
 }
 
 .cadastro-botoes {
     display: flex;
     justify-content: flex-end;
-    gap: 16px;
+    gap: 44px;
 
-    margin-top: 16px;
+    margin-top: 50px;
 }
 
 .botao {
-    min-width: 102px;
-    padding: 7px 14px;
+    min-width: 267px;
+    min-height: 66px;
+    padding: 12px 24px;
 
-    border-radius: 5px;
+    border-radius: 11px;
 
     font-family: Georgia, serif;
-    font-size: 10px;
+    font-size: 23px;
 
     text-decoration: none;
 
@@ -179,16 +211,44 @@
 
 @media (max-width: 700px) {
 
+    .cadastro-conteudo {
+        padding: 32px 18px;
+    }
+
+    .cadastro-conteudo h2 {
+        margin-bottom: 30px;
+        font-size: 30px;
+    }
+
     .cadastro-form {
         grid-template-columns: 1fr;
+        gap: 18px;
     }
 
     .fotos-lista {
-        margin-bottom: 15px;
+        gap: 10px;
+    }
+
+    .adicionar-foto,
+    .foto-preview {
+        flex-basis: 110px;
+        width: 110px;
+        height: 104px;
     }
 
     .linha-campos {
         grid-template-columns: 1fr;
         gap: 0;
+    }
+
+    .cadastro-botoes {
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .botao {
+        min-width: 0;
+        flex: 1;
+        font-size: 18px;
     }
 }

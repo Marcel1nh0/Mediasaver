@@ -1,7 +1,7 @@
 .post-page {
     flex: 1;
 
-    padding: 14px 24px 10px;
+    padding: 34px 35px 20px;
 
     background: #f4eee2;
 }
@@ -9,23 +9,24 @@
 .post-detalhes {
     display: grid;
 
-    grid-template-columns: 230px 1fr;
+    grid-template-columns: minmax(0, 598px) minmax(0, 1fr);
 
-    gap: 18px;
+    gap: 48px;
 
-    max-width: 1080px;
+    max-width: 1370px;
 
     margin: 0 auto;
 }
 
 .imagem-principal {
-    height: 107px;
+    width: 100%;
+    height: 281px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border-radius: 8px;
+    border-radius: 20px;
 
     color: white;
 
@@ -38,17 +39,18 @@
 
 .miniaturas {
     display: flex;
-    gap: 6px;
+    gap: 14px;
 
-    margin-top: 6px;
+    margin-top: 14px;
 }
 
 .miniaturas div,
 .miniaturas button {
-    width: 53px;
-    height: 36px;
+    flex: 0 0 140px;
+    width: 140px;
+    height: 95px;
 
-    border-radius: 7px;
+    border-radius: 20px;
 }
 
 .miniaturas div {
@@ -60,7 +62,7 @@
 }
 
 .miniaturas button {
-    border: 1px dashed #d0ad89;
+    border: 2px dashed #ca8150;
 
     color: #a17c5e;
 
@@ -82,7 +84,7 @@
     margin: 0 0 4px;
 
     font-family: Georgia, serif;
-    font-size: 16px;
+    font-size: 42px;
 }
 
 .post-titulo p {
@@ -90,28 +92,33 @@
 
     color: #856d5a;
 
-    font-size: 8px;
+    font-size: 20px;
 }
 
 .editar {
-    height: 25px;
+    height: 48px;
+    min-width: 138px;
 
-    padding: 5px 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 20px;
 
-    border: 1px solid #c65d43;
-    border-radius: 5px;
+    border: 2px solid #c65d43;
+    border-radius: 10px;
 
     color: #b94b35;
 
-    font-size: 9px;
+    font-family: Georgia, serif;
+    font-size: 22px;
 
     text-decoration: none;
 }
 
 .descricao {
-    margin: 14px 0 8px;
+    margin: 24px 0 24px;
 
-    font-size: 9px;
+    font-size: 20px;
 }
 
 .autor {
@@ -119,106 +126,158 @@
 
     color: #765d4c;
 
-    font-size: 8px;
+    font-size: 20px;
 }
 
 .voto {
-    position: absolute;
-    right: 0;
-    bottom: 28px;
-
-    padding: 5px 9px;
-
-    border-radius: 10px;
-
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+    padding: 10px 16px;
+    border-radius: 24px;
     color: #654c39;
-
     background: #eadbc6;
+    font-size: 20px;
+}
 
-    font-size: 9px;
+.voto button {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    color: #654c39;
+    background: transparent;
+}
+
+.voto-contra {
+    transform: rotate(180deg);
 }
 
 .ver-eBay {
+    width: fit-content;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
     margin-top: 10px;
-
-    padding: 6px 10px;
-
-    border: 1px solid #b94b35;
-    border-radius: 4px;
+    padding: 10px 18px;
+    border: 2px solid #b94b35;
+    border-radius: 10px;
 
     color: #b94b35;
     background: transparent;
-
-    font-size: 9px;
+    font-family: Georgia, serif;
+    font-size: 21px;
+    text-decoration: none;
 }
 
 .comentarios {
-    max-width: 1080px;
+    max-width: 1370px;
 
-    margin: 8px auto 0;
+    margin: 22px auto 0;
 }
 
 .comentarios h3 {
-    margin: 0 0 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
 
     font-family: Georgia, serif;
-    font-size: 9px;
+    font-size: 20px;
 }
 
 .comentario {
-    margin-bottom: 5px;
-
-    padding: 5px 8px;
-
-    border: 1px solid #e8d9c9;
-    border-radius: 5px;
-
-    background: white;
-
-    font-size: 9px;
+    margin: 0 0 8px;
+    color: #655142;
+    font-size: 16px;
 }
 
 .novo-comentario {
     display: flex;
-    gap: 6px;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 18px;
 }
 
 .novo-comentario input {
-    flex: 1;
-
-    min-width: 0;
-
-    padding: 5px 8px;
-
+    width: min(100%, 520px);
+    min-height: 52px;
+    padding: 10px 14px;
     border: 1px solid #d9b39b;
-    border-radius: 5px;
-
+    border-radius: 10px;
     outline: none;
-
-    font-size: 9px;
+    background: #fff;
+    font-size: 17px;
 }
 
 .novo-comentario button {
-    width: 55px;
-
+    min-width: 138px;
+    min-height: 52px;
     border: 0;
-    border-radius: 5px;
-
+    border-radius: 10px;
     color: white;
     background: #b94b35;
-
-    font-size: 9px;
+    font-family: Georgia, serif;
+    font-size: 20px;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 800px) {
+
+    .post-page {
+        padding: 26px 18px;
+    }
 
     .post-detalhes {
         grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .imagem-principal {
+        height: auto;
+        aspect-ratio: 2.1;
+    }
+
+    .miniaturas div,
+    .miniaturas button {
+        flex-basis: 100px;
+        width: 100px;
+        height: 72px;
     }
 
     .voto {
-        position: static;
-        display: inline-block;
-        margin-top: 10px;
+        width: fit-content;
+    }
+
+    .comentarios {
+        margin-top: 24px;
+    }
+
+    .novo-comentario input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .post-titulo h2 {
+        font-size: 30px;
+    }
+
+    .post-titulo p,
+    .descricao,
+    .autor {
+        font-size: 16px;
+    }
+
+    .post-titulo {
+        flex-direction: column;
+    }
+
+    .novo-comentario {
+        flex-direction: column;
+    }
+
+    .novo-comentario button {
+        width: 100%;
     }
 }

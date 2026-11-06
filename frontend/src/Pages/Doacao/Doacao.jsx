@@ -1,80 +1,53 @@
-import { HeartHandshake, Copy } from "lucide-react";
 import { useState } from "react";
-
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
+import { useNavigate } from "react-router-dom";
 
 import "./Doacao.css";
 
 function Doacao() {
-
-    const [copiado, setCopiado] =
-        useState(false);
-
-    const chave =
-        "contato@mediasaver.com";
-
-    function copiar() {
-
-        navigator.clipboard.writeText(chave);
-
-        setCopiado(true);
-
-        setTimeout(() => {
-            setCopiado(false);
-        }, 2000);
-    }
+    const navigate = useNavigate();
+    const [valorSelecionado, setValorSelecionado] = useState(null);
+    const [mensagem, setMensagem] = useState("");
 
     return (
-        <div className="page">
+        <div className="doacao-overlay">
+            <section
+                className="doacao-caixa"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="doacao-titulo"
+            >
+                <h2 id="doacao-titulo">Apoie a preservação</h2>
+                <span className="doacao-status">Em breve</span>
+                <p>Contribua com acervos e museus parceiros.</p>
 
-            <Header />
-
-            <main className="doacao-conteudo">
-
-                <div className="doacao-caixa">
-
-                    <HeartHandshake
-                        size={48}
-                        strokeWidth={1.5}
-                    />
-
-                    <h2>
-                        Apoie o MediaSaver
-                    </h2>
-
-                    <p>
-                        Ajude a manter o projeto
-                        <br />
-                        e preservar essas memórias.
-                    </p>
-
-                    <div className="pix">
-
-                        <span>
-                            Chave para doação
-                        </span>
-
-                        <strong>
-                            {chave}
-                        </strong>
-
-                        <button onClick={copiar}>
-                            <Copy size={14} />
-
-                            {copiado
-                                ? "Copiado!"
-                                : "Copiar chave"}
+                <div className="doacao-valores" aria-label="Valor da doação">
+                    {[10, 25, 50].map((valor) => (
+                        <button
+                            key={valor}
+                            type="button"
+                            className={valorSelecionado === valor ? "selecionado" : ""}
+                            aria-pressed={valorSelecionado === valor}
+                            onClick={() => setValorSelecionado(valor)}
+                        >
+                            R$ {valor}
                         </button>
-
-                    </div>
-
+                    ))}
                 </div>
 
-            </main>
-
-            <Footer />
-
+                <button
+                    className="doacao-confirmar"
+                    type="button"
+                    onClick={() => setMensagem(
+                        valorSelecionado
+                            ? `Doações de R$ ${valorSelecionado} estarão disponíveis em breve.`
+                            : "Selecione um valor para continuar."
+                    )}
+                >
+                    Confirmar doação
+                </button>
+                {mensagem && <p className="doacao-mensagem" role="status">{mensagem}</p>}
+                <button className="doacao-fechar" type="button" onClick={() => navigate("/")}>Fechar</button>
+            </section>
         </div>
     );
 }

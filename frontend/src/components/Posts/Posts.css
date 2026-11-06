@@ -1,14 +1,17 @@
 .post {
     min-width: 0;
 
-    padding: 10px 10px 12px;
+    display: block;
+    padding: 18px 22px 22px;
 
     background-color: white;
-    border-radius: 12px;
+    border-radius: 20px;
 
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
 
     transition: transform 0.2s;
+    color: inherit;
+    text-decoration: none;
 }
 
 .post:hover {
@@ -16,13 +19,14 @@
 }
 
 .post-imagem {
-    height: 116px;
+    width: 100%;
+    aspect-ratio: 1.28;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border-radius: 10px;
+    border-radius: 20px;
 
     color: #f8eee3;
 
@@ -42,7 +46,7 @@
 
     color: #40352e;
 
-    font-size: 12px;
+    font-size: 20px;
     font-weight: 500;
 
     white-space: nowrap;
@@ -51,12 +55,12 @@
 }
 
 .post-descricao {
-    min-height: 16px;
+    min-height: 24px;
 
     margin: 0;
 
     color: #8a6c56;
-    font-size: 11px;
+    font-size: 20px;
 }
 
 .post-informacoes {
@@ -64,10 +68,35 @@
     align-items: center;
     justify-content: space-between;
 
-    margin-top: 8px;
+    margin-top: 12px;
 
     color: #161616;
-    font-size: 11px;
+    font-size: 18px;
+}
+
+.post-voto-icone {
+    font-size: 20px;
+    line-height: 1;
+}
+
+@media (max-width: 600px) {
+    .post {
+        padding: 12px;
+        border-radius: 14px;
+    }
+
+    .post-imagem {
+        border-radius: 12px;
+    }
+
+    .post-conteudo h3,
+    .post-descricao {
+        font-size: 15px;
+    }
+
+    .post-informacoes {
+        font-size: 14px;
+    }
 }
 
 .post-informacoes span {

@@ -1,12 +1,12 @@
 .footer {
-    min-height: 88px;
+    min-height: 166px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     gap: 20px;
-    padding: 18px 26px;
+    padding: 28px 50px;
 
     background-color: #c58b5d;
 }
@@ -15,7 +15,7 @@
     color: #392719;
 
     font-family: Georgia, serif;
-    font-size: 14px;
+    font-size: 24px;
     font-weight: bold;
 
     text-decoration: none;
@@ -27,16 +27,16 @@
     gap: 22px;
 }
 
-.footer-botoes button {
-    min-width: 116px;
-    min-height: 38px;
+.footer-botao {
+    min-width: 218px;
+    min-height: 68px;
 
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 7px;
 
-    padding: 8px 15px;
+    padding: 12px 24px;
 
     border: none;
     border-radius: 6px;
@@ -47,13 +47,8 @@
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
 
     font-family: Georgia, serif;
+    font-size: 24px;
     font-weight: bold;
-
-    cursor: pointer;
-}
-
-.footer-botoes button:hover {
-    background-color: #fffaf2;
 }
 
 @media (max-width: 650px) {
@@ -68,38 +63,28 @@
         gap: 10px;
     }
 
-    .footer-botoes button {
+    .footer-botoes .footer-botao {
         flex: 1;
     }
 }
 
-.footer-botao {
-    min-width: 116px;
-    min-height: 38px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 7px;
-
-    padding: 8px 15px;
-
-    border-radius: 6px;
-
-    color: #62442e;
-    background: #f5eee2;
-
-    box-shadow:
-            0 2px 3px rgba(0, 0, 0, 0.25);
-
-    font-family: Georgia, serif;
-    font-size: 13px;
-    font-weight: bold;
-
-    text-decoration: none;
-}
-
 .footer-botao:hover {
     background: #fffaf2;
+}
+
+@media (max-width: 600px) {
+    .footer {
+        min-height: 0;
+        padding: 24px 20px;
+    }
+
+    .footer > a {
+        font-size: 17px;
+    }
+
+    .footer-botao {
+        min-width: 0;
+        min-height: 54px;
+        font-size: 18px;
+    }
 }

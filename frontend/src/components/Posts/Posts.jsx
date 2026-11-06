@@ -5,6 +5,7 @@ import {
     Radio,
     MessageSquare
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import "./Posts.css";
 
@@ -20,7 +21,7 @@ function Posts({ post }) {
     const Icone = icones[post.icone] || Camera;
 
     return (
-        <div className="post">
+        <Link className="post" to={`/post?id=${post.id}`}>
 
             {/* Imagem provisória */}
             <div className="post-imagem">
@@ -42,7 +43,8 @@ function Posts({ post }) {
                 <div className="post-informacoes">
 
                     <span>
-                        ▲ {post.votos}
+                        <span className="post-voto-icone" aria-hidden="true">▲</span>
+                        {post.votos}
                     </span>
 
                     <span>
@@ -54,7 +56,7 @@ function Posts({ post }) {
 
             </div>
 
-        </div>
+        </Link>
     );
 }
 

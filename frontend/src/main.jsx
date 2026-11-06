@@ -13,13 +13,12 @@ import Cadastro from "./Pages/Cadastro/Cadastro";
 import Edicao from "./Pages/Edicao/Edicao";
 import Post from "./Pages/Post/Post";
 import Perfil from "./Pages/Perfil/Perfil";
-import Doacao from "./Pages/Doacao/Doacao";
 
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
 
             <div className="app">
 
@@ -57,7 +56,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
                     <Route
                         path="/doacao"
-                        element={<Doacao />}
+                        element={<Home />}
                     />
 
                 </Routes>

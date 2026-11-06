@@ -1,19 +1,47 @@
+import { useState } from "react";
 import {
     Camera,
     Plus,
-    MessageSquare
+    MessageSquare,
+    Triangle
 } from "lucide-react";
 
-import {
-    Link
-} from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import { posts } from "../../data/data";
 
 import "./Post.css";
 
 function Post() {
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const item = posts.find((post) => post.id === Number(searchParams.get("id"))) || posts[0];
+    const [votosPorPost, setVotosPorPost] = useState({});
+    const [comentariosPorPost, setComentariosPorPost] = useState({});
+    const [rascunhosPorPost, setRascunhosPorPost] = useState({});
+    const votos = votosPorPost[item.id] ?? item.votos;
+    const comentarios = comentariosPorPost[item.id] ?? (
+        item.id === 1
+            ? [
+                "Ana: Lembro de uma igual na casa do meu avô!",
+                "Pedro: Ainda funciona com filme?",
+            ]
+            : []
+    );
+    const comentario = rascunhosPorPost[item.id] ?? "";
+
+    function enviarComentario(evento) {
+        evento.preventDefault();
+        const texto = comentario.trim();
+        if (!texto) return;
+        setComentariosPorPost((atuais) => ({
+            ...atuais,
+            [item.id]: [...comentarios, `Você: ${texto}`],
+        }));
+        setRascunhosPorPost((atuais) => ({ ...atuais, [item.id]: "" }));
+    }
 
     return (
         <div className="page">
@@ -27,16 +55,16 @@ function Post() {
                     <div className="post-imagens">
 
                         <div className="imagem-principal">
-                            <Camera size={42} />
+                            <Camera size={80} />
                         </div>
 
                         <div className="miniaturas">
 
-                            <div></div>
-                            <div></div>
-                            <div></div>
+                            <div aria-hidden="true"></div>
+                            <div aria-hidden="true"></div>
+                            <div aria-hidden="true"></div>
 
-                            <button>
+                            <button type="button" aria-label="Adicionar fotos" onClick={() => navigate("/edicao")}>
                                 <Plus size={16} />
                             </button>
 
@@ -51,11 +79,11 @@ function Post() {
                             <div>
 
                                 <h2>
-                                    Câmera Kodak anos 60
+                                    {item.nome}
                                 </h2>
 
                                 <p>
-                                    Marca: Kodak • Ano de lançamento: 1962
+                                    {[item.marca, item.ano].filter(Boolean).join(" • ")}
                                 </p>
 
                             </div>
@@ -70,20 +98,26 @@ function Post() {
                         </div>
 
                         <p className="descricao">
-                            Câmera de vídeo em ótimo estado.
+                            {item.id === 1 ? "Câmera de vídeo em ótimo estado." : `Item de acervo: ${item.categoria}.`}
                         </p>
 
                         <p className="autor">
                             Por Marcelo Queiroz
                         </p>
 
-                        <div className="voto">
-                            ▲ 12 ▼
+                        <div className="voto" aria-label={`${votos} votos`}>
+                            <button type="button" aria-label="Votar a favor" onClick={() => setVotosPorPost((atuais) => ({ ...atuais, [item.id]: votos + 1 }))}>
+                                <Triangle size={18} fill="currentColor" />
+                            </button>
+                            <span>{votos}</span>
+                            <button type="button" aria-label="Votar contra" onClick={() => setVotosPorPost((atuais) => ({ ...atuais, [item.id]: votos - 1 }))}>
+                                <Triangle className="voto-contra" size={18} fill="currentColor" />
+                            </button>
                         </div>
 
-                        <button className="ver-eBay">
+                        <a className="ver-eBay" href="https://www.ebay.com" target="_blank" rel="noreferrer">
                             Ver no eBay
-                        </button>
+                        </a>
 
                     </div>
 
@@ -91,30 +125,27 @@ function Post() {
 
                 <section className="comentarios">
 
-                    <h3>
-                        Comentários(2)
-                    </h3>
+                    <h3><MessageSquare size={20} /> Comentários({comentarios.length})</h3>
 
-                    <div className="comentario">
-                        Ana: Lembro de uma igual na casa do meu avô!
+                    <div className="comentarios-lista" aria-live="polite">
+                        {comentarios.map((texto, indice) => <p className="comentario" key={`${indice}-${texto}`}>{texto}</p>)}
                     </div>
 
-                    <div className="comentario">
-                        Pedro: Ainda funciona com filme?
-                    </div>
-
-                    <div className="novo-comentario">
+                    <form className="novo-comentario" onSubmit={enviarComentario}>
 
                         <input
                             type="text"
                             placeholder="Escreva um comentário..."
+                            value={comentario}
+                            onChange={(evento) => setRascunhosPorPost((atuais) => ({ ...atuais, [item.id]: evento.target.value }))}
+                            aria-label="Escreva um comentário"
                         />
 
-                        <button>
+                        <button type="submit">
                             Enviar
                         </button>
 
-                    </div>
+                    </form>
 
                 </section>
 

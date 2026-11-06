@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import Header from "../../components/Header/Header";
 import Buscador from "../../components/Buscador/Buscador";
@@ -6,12 +7,14 @@ import Posts from "../../components/Posts/Posts.jsx";
 import Footer from "../../components/Footer/Footer";
 
 import { posts } from "../../data/data";
+import Doacao from "../Doacao/Doacao";
 
 import "./Home.css";
 
 function Home() {
 
     const [busca, setBusca] = useState("");
+    const location = useLocation();
 
     const postsFiltrados = posts.filter((post) => {
 
@@ -63,6 +66,8 @@ function Home() {
             </main>
 
             <Footer />
+
+            {location.pathname === "/doacao" && <Doacao />}
 
         </div>
     );
