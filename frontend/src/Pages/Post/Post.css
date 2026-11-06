@@ -1,0 +1,224 @@
+.post-page {
+    flex: 1;
+
+    padding: 14px 24px 10px;
+
+    background: #f4eee2;
+}
+
+.post-detalhes {
+    display: grid;
+
+    grid-template-columns: 230px 1fr;
+
+    gap: 18px;
+
+    max-width: 1080px;
+
+    margin: 0 auto;
+}
+
+.imagem-principal {
+    height: 107px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    color: white;
+
+    background: linear-gradient(
+            110deg,
+            #80522f,
+            #dd9560
+    );
+}
+
+.miniaturas {
+    display: flex;
+    gap: 6px;
+
+    margin-top: 6px;
+}
+
+.miniaturas div,
+.miniaturas button {
+    width: 53px;
+    height: 36px;
+
+    border-radius: 7px;
+}
+
+.miniaturas div {
+    background: linear-gradient(
+            110deg,
+            #80522f,
+            #d9905c
+    );
+}
+
+.miniaturas button {
+    border: 1px dashed #d0ad89;
+
+    color: #a17c5e;
+
+    background: transparent;
+}
+
+.post-texto {
+    position: relative;
+}
+
+.post-titulo {
+    display: flex;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+.post-titulo h2 {
+    margin: 0 0 4px;
+
+    font-family: Georgia, serif;
+    font-size: 16px;
+}
+
+.post-titulo p {
+    margin: 0;
+
+    color: #856d5a;
+
+    font-size: 8px;
+}
+
+.editar {
+    height: 25px;
+
+    padding: 5px 13px;
+
+    border: 1px solid #c65d43;
+    border-radius: 5px;
+
+    color: #b94b35;
+
+    font-size: 9px;
+
+    text-decoration: none;
+}
+
+.descricao {
+    margin: 14px 0 8px;
+
+    font-size: 9px;
+}
+
+.autor {
+    margin: 0;
+
+    color: #765d4c;
+
+    font-size: 8px;
+}
+
+.voto {
+    position: absolute;
+    right: 0;
+    bottom: 28px;
+
+    padding: 5px 9px;
+
+    border-radius: 10px;
+
+    color: #654c39;
+
+    background: #eadbc6;
+
+    font-size: 9px;
+}
+
+.ver-eBay {
+    margin-top: 10px;
+
+    padding: 6px 10px;
+
+    border: 1px solid #b94b35;
+    border-radius: 4px;
+
+    color: #b94b35;
+    background: transparent;
+
+    font-size: 9px;
+}
+
+.comentarios {
+    max-width: 1080px;
+
+    margin: 8px auto 0;
+}
+
+.comentarios h3 {
+    margin: 0 0 5px;
+
+    font-family: Georgia, serif;
+    font-size: 9px;
+}
+
+.comentario {
+    margin-bottom: 5px;
+
+    padding: 5px 8px;
+
+    border: 1px solid #e8d9c9;
+    border-radius: 5px;
+
+    background: white;
+
+    font-size: 9px;
+}
+
+.novo-comentario {
+    display: flex;
+    gap: 6px;
+}
+
+.novo-comentario input {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 5px 8px;
+
+    border: 1px solid #d9b39b;
+    border-radius: 5px;
+
+    outline: none;
+
+    font-size: 9px;
+}
+
+.novo-comentario button {
+    width: 55px;
+
+    border: 0;
+    border-radius: 5px;
+
+    color: white;
+    background: #b94b35;
+
+    font-size: 9px;
+}
+
+@media (max-width: 650px) {
+
+    .post-detalhes {
+        grid-template-columns: 1fr;
+    }
+
+    .voto {
+        position: static;
+        display: inline-block;
+        margin-top: 10px;
+    }
+}

@@ -1,0 +1,29 @@
+.header {
+    height: 88px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #c58b5d;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icone {
+    font-size: 43px;
+}
+
+.logo h1 {
+    margin: 0;
+
+    color: #fff8ed;
+
+    font-family: Georgia, serif;
+    font-size: 34px;
+    font-weight: normal;
+}

@@ -25,3 +25,8 @@ obj/
 *.ntvs*
 *.njsproj
 *.sw?
+
+# .NET
+bin/
+obj/
+.vs/
