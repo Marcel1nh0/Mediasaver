@@ -59,14 +59,16 @@ await InicializadorBanco.ExecutarAsync(app.Services);
 app.UseExceptionHandler(erro => erro.Run(async contexto =>
 {
     var ex = contexto.Features.Get<IExceptionHandlerFeature>()?.Error;
-    var (status, mensagem) = ex switch
+    var (status, mensagem) = ex is ServicoExternoException
+        ? (StatusCodes.Status502BadGateway, ex.Message)
+        : (StatusCodes.Status500InternalServerError, "Erro interno no servidor.");
+
+    // Banco fora do ar vira 503.
+    if (ex is MySqlException)
     {
-        ServicoExternoException => (StatusCodes.Status502BadGateway, ex.Message),
-        MySqlException => (StatusCodes.Status503ServiceUnavailable,
-            "Não foi possível acessar o banco de dados. Confira se o MySQL está rodando."),
-        BadHttpRequestException bad => (bad.StatusCode, "Requisição inválida. Confira os dados enviados."),
-        _ => (StatusCodes.Status500InternalServerError, "Erro interno no servidor.")
-    };
+        status = StatusCodes.Status503ServiceUnavailable;
+        mensagem = "Não foi possível acessar o banco de dados. Confira se o MySQL está rodando.";
+    }
 
     contexto.Response.StatusCode = status;
     await contexto.Response.WriteAsJsonAsync(new { erro = mensagem });

@@ -37,5 +37,13 @@ public record ComentarioRequest(string? Conteudo);
 public record VotoRequest(int Valor);
 public record VotoResposta(int Karma, int MeuVoto);
 
-/// <summary>Campos do formulário de criar/editar post, já validados.</summary>
-internal record CamposPost(string Titulo, string? Descricao, string? Marca, int? AnoLancamento, string Categoria);
+/// <summary>Campos do formulário de criar/editar post.</summary>
+public class CamposPost
+{
+    public string Titulo { get; set; } = "";
+    public string? Descricao { get; set; }
+    public string? Marca { get; set; }
+    public string? TextoAno { get; set; }      // como veio do formulário
+    public int? AnoLancamento { get; set; }    // preenchido depois de validar
+    public string Categoria { get; set; } = "outro";
+}

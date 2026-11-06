@@ -8,6 +8,7 @@ using MySqlConnector;
 
 namespace MediaSaver.Api.Contas;
 
+// Dados que chegam do site (JSON) e que voltam para ele.
 public record CadastroRequest(string? Nome, string? Email, string? Senha);
 public record LoginRequest(string? Email, string? Senha);
 
@@ -16,92 +17,107 @@ public record UsuarioResposta(
 
 public static class ContaEndpoints
 {
-    // Hash de senha do próprio ASP.NET Core (PBKDF2 com salt aleatório).
-    private static readonly PasswordHasher<object> Hasher = new();
-    private static readonly object Ninguem = new();
+    // Gera e confere o hash das senhas (PBKDF2 com salt aleatório), do próprio ASP.NET Core.
+    private static readonly PasswordHasher<object> Hasher = new PasswordHasher<object>();
+    private static readonly object Ninguem = new object();
 
     public static IEndpointRouteBuilder MapContaEndpoints(this IEndpointRouteBuilder app)
     {
         var grupo = app.MapGroup("/api/auth").WithTags("Conta");
 
+        // POST /api/auth/cadastro  { nome, email, senha }
         grupo.MapPost("/cadastro", async (CadastroRequest dados, Banco banco, HttpContext http, CancellationToken ct) =>
         {
-            var nome = dados.Nome?.Trim() ?? "";
-            var email = dados.Email?.Trim().ToLowerInvariant() ?? "";
-            var senha = dados.Senha ?? "";
+            string nome = (dados.Nome ?? "").Trim();
+            string email = (dados.Email ?? "").Trim().ToLower();
+            string senha = dados.Senha ?? "";
 
-            if (nome.Length is < 2 or > 100)
+            if (nome.Length < 2 || nome.Length > 100)
                 return Erro(400, "Informe um nome entre 2 e 100 caracteres.");
             if (email.Length > 255 || !email.Contains('@') || !email.Contains('.'))
                 return Erro(400, "Informe um e-mail válido.");
             if (senha.Length < 6)
                 return Erro(400, "A senha precisa ter pelo menos 6 caracteres.");
 
-            await using var conexao = await banco.AbrirAsync(ct);
+            using var conexao = await banco.AbrirAsync(ct);
 
-            var existe = await conexao.Sql("SELECT COUNT(*) FROM Usuar WHERE email = @email", new { email })
-                .ExecuteScalarAsync(ct);
-            if (Convert.ToInt32(existe) > 0)
+            var contar = new MySqlCommand("SELECT COUNT(*) FROM Usuar WHERE email = @email", conexao);
+            Banco.Parametro(contar, "@email", email);
+            int existentes = Convert.ToInt32(await contar.ExecuteScalarAsync(ct));
+
+            if (existentes > 0)
                 return Erro(409, "Já existe uma conta com esse e-mail. Entre com ela.");
 
-            var comando = conexao.Sql(
-                "INSERT INTO Usuar (nome, email, senha) VALUES (@nome, @email, @senha)",
-                new { nome, email, senha = Hasher.HashPassword(Ninguem, senha) });
-            await comando.ExecuteNonQueryAsync(ct);
+            var inserir = new MySqlCommand(
+                "INSERT INTO Usuar (nome, email, senha) VALUES (@nome, @email, @senha)", conexao);
+            Banco.Parametro(inserir, "@nome", nome);
+            Banco.Parametro(inserir, "@email", email);
+            Banco.Parametro(inserir, "@senha", Hasher.HashPassword(Ninguem, senha)); // só o hash vai para o banco
+            await inserir.ExecuteNonQueryAsync(ct);
 
-            var usuario = await BuscarAsync(conexao, (int)comando.LastInsertedId, ct);
+            int novoId = (int)inserir.LastInsertedId;
+            UsuarioResposta? usuario = await BuscarAsync(conexao, novoId, ct);
+
             await EntrarAsync(http, usuario!);
             return Results.Created("/api/auth/eu", usuario);
         });
 
+        // POST /api/auth/login  { email, senha }
         grupo.MapPost("/login", async (LoginRequest dados, Banco banco, HttpContext http, CancellationToken ct) =>
         {
-            var email = dados.Email?.Trim().ToLowerInvariant() ?? "";
+            string email = (dados.Email ?? "").Trim().ToLower();
 
-            await using var conexao = await banco.AbrirAsync(ct);
-            await using var leitor = await conexao
-                .Sql("SELECT id, senha FROM Usuar WHERE email = @email", new { email })
-                .ExecuteReaderAsync(ct);
+            using var conexao = await banco.AbrirAsync(ct);
 
-            if (!await leitor.ReadAsync(ct))
-                return Erro(401, "E-mail ou senha incorretos.");
+            int id;
+            string hash;
 
-            var id = leitor.Int("id");
-            var hash = leitor.Texto("senha");
-            await leitor.CloseAsync();
+            var buscar = new MySqlCommand("SELECT id, senha FROM Usuar WHERE email = @email", conexao);
+            Banco.Parametro(buscar, "@email", email);
 
+            using (var leitor = await buscar.ExecuteReaderAsync(ct))
+            {
+                if (!await leitor.ReadAsync(ct))
+                    return Erro(401, "E-mail ou senha incorretos.");
+
+                id = leitor.Int("id");
+                hash = leitor.Texto("senha");
+            }
+
+            // Compara a senha digitada com o hash guardado.
             var resultado = Hasher.VerifyHashedPassword(Ninguem, hash, dados.Senha ?? "");
             if (resultado == PasswordVerificationResult.Failed)
                 return Erro(401, "E-mail ou senha incorretos.");
 
-            var usuario = await BuscarAsync(conexao, id, ct);
+            UsuarioResposta? usuario = await BuscarAsync(conexao, id, ct);
             await EntrarAsync(http, usuario!);
             return Results.Ok(usuario);
         });
 
+        // POST /api/auth/logout
         grupo.MapPost("/logout", async (HttpContext http) =>
         {
             await http.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Results.NoContent();
         });
 
-        // Quem está logado agora (o frontend chama ao abrir o site). Sem login, devolve null.
+        // GET /api/auth/eu: quem está logado agora (o site chama ao abrir). Sem login, devolve null.
         grupo.MapGet("/eu", async (ClaimsPrincipal user, Banco banco, HttpContext http, CancellationToken ct) =>
         {
-            if (user.Identity?.IsAuthenticated != true)
+            if (!EstaLogado(user))
                 return Results.Json<UsuarioResposta?>(null);
 
-            await using var conexao = await banco.AbrirAsync(ct);
-            var usuario = await BuscarAsync(conexao, user.IdUsuario(), ct);
+            using var conexao = await banco.AbrirAsync(ct);
+            UsuarioResposta? usuario = await BuscarAsync(conexao, IdUsuario(user), ct);
 
             // Se a conta foi apagada do banco, encerra a sessão.
-            if (usuario is null)
+            if (usuario == null)
                 await http.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return Results.Json(usuario);
         });
 
-        // Troca a foto do perfil (campo "foto" do formulário).
+        // PUT /api/usuarios/eu/foto: troca a foto do perfil (campo "foto" do formulário).
         app.MapPut("/api/usuarios/eu/foto", async (
             HttpRequest request, ClaimsPrincipal user, Banco banco, Imagens imagens, CancellationToken ct) =>
         {
@@ -109,57 +125,88 @@ public static class ContaEndpoints
                 return Erro(400, "Envie a foto como formulário (multipart/form-data).");
 
             var formulario = await request.ReadFormAsync(ct);
-            var foto = formulario.Files.GetFile("foto");
-            if (foto is null) return Erro(400, "Escolha uma foto.");
-            if (Imagens.Validar(foto) is { } erro) return Erro(400, erro);
+            IFormFile? foto = formulario.Files.GetFile("foto");
 
-            await using var conexao = await banco.AbrirAsync(ct);
-            var anterior = await conexao.Sql("SELECT fotoPath FROM Usuar WHERE id = @id", new { id = user.IdUsuario() })
-                .ExecuteScalarAsync(ct) as string;
+            if (foto == null)
+                return Erro(400, "Escolha uma foto.");
 
-            var url = await imagens.SalvarAsync(foto, ct);
-            await conexao.Sql("UPDATE Usuar SET fotoPath = @url WHERE id = @id", new { url, id = user.IdUsuario() })
-                .ExecuteNonQueryAsync(ct);
-            imagens.Apagar(anterior);
+            string? erroFoto = Imagens.Validar(foto);
+            if (erroFoto != null)
+                return Erro(400, erroFoto);
 
-            return Results.Ok(await BuscarAsync(conexao, user.IdUsuario(), ct));
+            int idUsuario = IdUsuario(user);
+            using var conexao = await banco.AbrirAsync(ct);
+
+            var buscarAnterior = new MySqlCommand("SELECT fotoPath FROM Usuar WHERE id = @id", conexao);
+            Banco.Parametro(buscarAnterior, "@id", idUsuario);
+            string? fotoAnterior = await buscarAnterior.ExecuteScalarAsync(ct) as string;
+
+            string url = await imagens.SalvarAsync(foto, ct);
+
+            var atualizar = new MySqlCommand("UPDATE Usuar SET fotoPath = @url WHERE id = @id", conexao);
+            Banco.Parametro(atualizar, "@url", url);
+            Banco.Parametro(atualizar, "@id", idUsuario);
+            await atualizar.ExecuteNonQueryAsync(ct);
+
+            imagens.Apagar(fotoAnterior); // a foto antiga não é mais usada
+
+            return Results.Ok(await BuscarAsync(conexao, idUsuario, ct));
         }).RequireAuthorization().WithTags("Conta");
 
         return app;
     }
 
-    public static int IdUsuario(this ClaimsPrincipal user) =>
-        int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    // ---------- Funções de apoio, usadas também pelos posts ----------
 
-    public static bool EhAdm(this ClaimsPrincipal user) => user.IsInRole("adm");
+    public static bool EstaLogado(ClaimsPrincipal user)
+    {
+        return user.Identity != null && user.Identity.IsAuthenticated;
+    }
 
-    public static IResult Erro(int status, string mensagem) =>
-        Results.Json(new { erro = mensagem }, statusCode: status);
+    /// <summary>Id do usuário logado, guardado no cookie de sessão.</summary>
+    public static int IdUsuario(ClaimsPrincipal user)
+    {
+        return int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    }
 
+    public static bool EhAdm(ClaimsPrincipal user)
+    {
+        return user.IsInRole("adm");
+    }
+
+    /// <summary>Resposta de erro em JSON: { "erro": "mensagem" }.</summary>
+    public static IResult Erro(int status, string mensagem)
+    {
+        return Results.Json(new { erro = mensagem }, statusCode: status);
+    }
+
+    /// <summary>Cria a sessão: o navegador recebe um cookie com o id e o nome do usuário.</summary>
     private static async Task EntrarAsync(HttpContext http, UsuarioResposta usuario)
     {
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
-            new(ClaimTypes.Name, usuario.Nome)
-        };
-        if (usuario.Adm) claims.Add(new Claim(ClaimTypes.Role, "adm"));
+        var claims = new List<Claim>();
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()));
+        claims.Add(new Claim(ClaimTypes.Name, usuario.Nome));
+
+        if (usuario.Adm)
+            claims.Add(new Claim(ClaimTypes.Role, "adm"));
 
         var identidade = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        await http.SignInAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            new ClaimsPrincipal(identidade),
-            new AuthenticationProperties { IsPersistent = true });
+        var propriedades = new AuthenticationProperties();
+        propriedades.IsPersistent = true; // continua logado mesmo fechando o navegador
+
+        await http.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identidade), propriedades);
     }
 
     private static async Task<UsuarioResposta?> BuscarAsync(MySqlConnection conexao, int id, CancellationToken ct)
     {
-        await using var leitor = await conexao.Sql("""
-            SELECT id, nome, email, adm, karma, qtdPost, fotoPath, dataConta
-            FROM Usuar WHERE id = @id
-            """, new { id }).ExecuteReaderAsync(ct);
+        var comando = new MySqlCommand(
+            "SELECT id, nome, email, adm, karma, qtdPost, fotoPath, dataConta FROM Usuar WHERE id = @id", conexao);
+        Banco.Parametro(comando, "@id", id);
 
-        if (!await leitor.ReadAsync(ct)) return null;
+        using var leitor = await comando.ExecuteReaderAsync(ct);
+
+        if (!await leitor.ReadAsync(ct))
+            return null;
 
         return new UsuarioResposta(
             leitor.Int("id"),

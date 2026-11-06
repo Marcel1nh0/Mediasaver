@@ -13,12 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Os scripts do banco vão dentro da API, que os roda ao iniciar. -->
-    <EmbeddedResource Include="..\..\DataBase\Modelagem.sql" LogicalName="Modelagem.sql" />
-    <EmbeddedResource Include="..\..\DataBase\DadosExemplo.sql" LogicalName="DadosExemplo.sql" />
-  </ItemGroup>
-
-  <ItemGroup>
     <!-- Fotos enviadas pelos usuários não fazem parte do código. -->
     <Content Remove="uploads\**" />
     <None Remove="uploads\**" />
